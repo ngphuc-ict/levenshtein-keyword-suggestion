@@ -81,10 +81,3 @@ Thuật toán chuẩn hóa Unicode về NFC, chuyển thành chữ thường, b�
 ## Ghi chú hiệu năng
 
 Với mỗi từ khóa trong từ điển, thuật toán tính khoảng cách trong thời gian O(m × n), với m và n là độ dài hai chuỗi. Quy hoạch động chỉ giữ hai hàng kết quả, nên bộ nhớ cho mỗi lần tính khoảng cách là O(min(m, n)). Việc quét toàn bộ từ điển được thực hiện cho mỗi truy vấn. Cần đo thời gian trên máy chạy demo để báo cáo tốc độ thực tế.
-
-## Phân công dự kiến
-
-- **Thuật toán:** algorithm.py — Levenshtein bằng quy hoạch động và xếp hạng Top 5.
-- **Dữ liệu:** dictionary.txt, data_processor.py — từ điển và xử lý đầu vào.
-- **Backend / Service:** ghép bộ đọc từ điển với utility, xây dựng luồng xử lý và unit test.
-- **UI / Báo cáo:** giao diện demo, benchmark và slide thuyết trình.
