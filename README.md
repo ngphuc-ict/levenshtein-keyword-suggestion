@@ -1,6 +1,6 @@
 # Gợi ý từ khóa bằng Quy hoạch động
 
-Đồ án giữa kỳ môn **Phân tích và Thiết kế Giải thuật**: xây dựng chức năng gợi ý từ khóa khi người dùng nhập sai chính tả, dựa trên khoảng cách chỉnh sửa chuỗi **Levenshtein** và kỹ thuật **Quy hoạch động (Dynamic Programming)**.
+Bài tập giữa kỳ môn **Phân tích và Thiết kế Giải thuật**: xây dựng chức năng gợi ý từ khóa khi người dùng nhập sai chính tả, dựa trên khoảng cách chỉnh sửa chuỗi **Levenshtein** và kỹ thuật **Quy hoạch động (Dynamic Programming)**.
 
 ## Mục tiêu
 
