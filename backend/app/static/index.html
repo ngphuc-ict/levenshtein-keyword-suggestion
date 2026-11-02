@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gợi ý từ khóa — Levenshtein</title>
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --ink: #16202e;
+    --muted: #66738a;
+    --line: #e3e8f1;
+    --brand: #1d4ed8;
+    --brand-soft: #e8efff;
+    --ok: #12805c;
+    --warn: #b42318;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+    background: radial-gradient(1200px 600px at 10% -10%, #e6eeff 0, transparent 55%), var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 16px 64px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+  h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.02em; }
+  .sub { margin: 0; color: var(--muted); font-size: 14px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+    padding: 7px 12px; font-size: 12.5px; color: var(--muted); white-space: nowrap;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #c8d0de; }
+  .dot.ok { background: var(--ok); }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; box-shadow: 0 12px 30px rgba(22, 32, 46, 0.06);
+  }
+  form { display: flex; gap: 10px; flex-wrap: wrap; }
+  input[type="text"] {
+    flex: 1 1 320px; min-width: 0; padding: 13px 15px; font-size: 15.5px;
+    border: 1px solid var(--line); border-radius: 12px; outline: none; color: var(--ink);
+    transition: border-color .15s, box-shadow .15s;
+  }
+  input[type="text"]:focus { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-soft); }
+  select {
+    padding: 13px 12px; border-radius: 12px; border: 1px solid var(--line);
+    background: #fff; color: var(--ink); font-size: 14px;
+  }
+  button {
+    padding: 13px 20px; border: 0; border-radius: 12px; background: var(--brand);
+    color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: transform .05s, background .15s;
+  }
+  button:hover { background: #173fc0; }
+  button:active { transform: translateY(1px); }
+  button[disabled] { opacity: .65; cursor: progress; }
+  .examples { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .chip {
+    border: 1px dashed var(--line); background: transparent; color: var(--muted);
+    border-radius: 999px; padding: 6px 12px; font-size: 13px; cursor: pointer;
+  }
+  .chip:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
+  .meta { margin: 16px 2px 0; font-size: 12.5px; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; }
+  .meta b { color: var(--ink); font-weight: 600; }
+  .results { margin-top: 18px; }
+  .result {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px;
+    margin-bottom: 8px; background: #fbfcff;
+  }
+  .result:first-child { border-color: #c9d8ff; background: #f3f7ff; }
+  .rank {
+    width: 26px; height: 26px; border-radius: 8px; background: var(--brand-soft);
+    color: var(--brand); font-size: 12.5px; font-weight: 700;
+    display: grid; place-items: center; flex: none;
+  }
+  .keyword { flex: 1; font-size: 15px; word-break: break-word; }
+  .distance {
+    flex: none; font-size: 12px; font-weight: 600; color: var(--muted);
+    background: #eef2f8; border-radius: 999px; padding: 5px 10px;
+  }
+  .distance.zero { color: var(--ok); background: #e6f6ef; }
+  .empty { color: var(--muted); font-size: 14px; padding: 10px 2px; }
+  .error {
+    margin-top: 14px; padding: 12px 14px; border-radius: 12px;
+    background: #fef3f2; border: 1px solid #fecdca; color: var(--warn); font-size: 14px;
+  }
+  footer { margin-top: 22px; text-align: center; color: var(--muted); font-size: 12.5px; }
+  footer a { color: var(--brand); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Gợi ý từ khóa</h1>
+      <p class="sub">Khoảng cách Levenshtein · quy hoạch động · gợi ý 5 từ khóa gần nhất</p>
+    </div>
+    <div class="badge"><span class="dot" id="health-dot"></span><span id="health-text">Đang kiểm tra…</span></div>
+  </header>
+
+  <section class="card">
+    <form id="form" autocomplete="off">
+      <input id="query" type="text" name="query" maxlength="200"
+             placeholder="Nhập từ khóa bị sai chính tả, ví dụ: điện thoại samsng" />
+      <select id="limit" title="Số gợi ý">
+        <option value="5" selected>5 gợi ý</option>
+        <option value="10">10 gợi ý</option>
+        <option value="20">20 gợi ý</option>
+      </select>
+      <button id="submit" type="submit">Gợi ý</button>
+    </form>
+
+    <div class="examples" id="examples">
+      <button class="chip" type="button">điện thoại samsng</button>
+      <button class="chip" type="button">tai nghe blutooth</button>
+      <button class="chip" type="button">áo thun akko</button>
+      <button class="chip" type="button">laptop dell i5</button>
+      <button class="chip" type="button">bàn phím cơ</button>
+    </div>
+
+    <div class="meta" id="meta" hidden>
+      <span>Thời gian: <b id="m-time">—</b></span>
+      <span>Ứng viên đã tính: <b id="m-eval">—</b></span>
+      <span>Bộ đệm: <b id="m-cache">—</b></span>
+    </div>
+
+    <div class="results" id="results"></div>
+    <div class="error" id="error" hidden></div>
+  </section>
+
+  <footer>
+    Từ điển <b id="dict-size">…</b> từ khóa ·
+    API: <a href="/docs">/docs</a> · <a href="/api/v1/stats">/api/v1/stats</a>
+  </footer>
+</div>
+
+<script>
+const form = document.getElementById("form");
+const input = document.getElementById("query");
+const limitSelect = document.getElementById("limit");
+const submit = document.getElementById("submit");
+const results = document.getElementById("results");
+const meta = document.getElementById("meta");
+const errorBox = document.getElementById("error");
+
+function showError(message) {
+  errorBox.textContent = message;
+  errorBox.hidden = false;
+}
+
+function clearError() {
+  errorBox.hidden = true;
+  errorBox.textContent = "";
+}
+
+function renderSuggestions(payload) {
+  results.innerHTML = "";
+  const items = payload.suggestions || [];
+
+  if (!items.length) {
+    const div = document.createElement("div");
+    div.className = "empty";
+    div.textContent = "Không tìm thấy từ khóa phù hợp. Thử nhập từ khóa khác.";
+    results.appendChild(div);
+    return;
+  }
+
+  items.forEach((item, index) => {
+    const row = document.createElement("div");
+    row.className = "result";
+
+    const rank = document.createElement("span");
+    rank.className = "rank";
+    rank.textContent = index + 1;
+
+    const keyword = document.createElement("span");
+    keyword.className = "keyword";
+    keyword.textContent = item.keyword;
+
+    const distance = document.createElement("span");
+    distance.className = "distance" + (item.distance === 0 ? " zero" : "");
+    distance.textContent = item.distance === 0 ? "khớp chính xác" : `cách ${item.distance}`;
+
+    row.append(rank, keyword, distance);
+    results.appendChild(row);
+  });
+}
+
+async function search(query) {
+  clearError();
+  const limit = Number(limitSelect.value);
+  submit.disabled = true;
+  submit.textContent = "Đang tìm…";
+  try {
+    const response = await fetch("/api/v1/suggest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, limit }),
+    });
+    const payload = await response.json();
+    if (!response.ok) {
+      const details = (payload.details || []).map((d) => d.message).join(" ");
+      throw new Error(payload.message || details || "Không gọi được API.");
+    }
+
+    renderSuggestions(payload);
+    meta.hidden = false;
+    document.getElementById("m-time").textContent = `${payload.took_ms.toFixed(2)} ms`;
+    document.getElementById("m-eval").textContent = payload.evaluated_candidates.toLocaleString("vi-VN");
+    document.getElementById("m-cache").textContent = payload.cached ? "có (hit)" : "không";
+  } catch (error) {
+    showError(error.message || "Có lỗi khi gọi API.");
+  } finally {
+    submit.disabled = false;
+    submit.textContent = "Gợi ý";
+  }
+}
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const query = input.value.trim();
+  if (!query) {
+    showError("Vui lòng nhập từ khóa cần gợi ý.");
+    input.focus();
+    return;
+  }
+  search(query);
+});
+
+document.getElementById("examples").addEventListener("click", (event) => {
+  const chip = event.target.closest(".chip");
+  if (!chip) return;
+  input.value = chip.textContent.trim();
+  search(input.value);
+});
+
+fetch("/api/v1/health")
+  .then((response) => response.json())
+  .then((payload) => {
+    document.getElementById("health-dot").classList.add("ok");
+    document.getElementById("health-text").textContent = "API sẵn sàng";
+    document.getElementById("dict-size").textContent = payload.dictionary_size.toLocaleString("vi-VN");
+  })
+  .catch(() => {
+    document.getElementById("health-text").textContent = "API chưa sẵn sàng";
+  });
+</script>
+</body>
+</html>

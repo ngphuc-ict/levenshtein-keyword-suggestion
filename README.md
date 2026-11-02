@@ -81,3 +81,20 @@ Thuật toán chuẩn hóa Unicode về NFC, chuyển thành chữ thường, b�
 ## Ghi chú hiệu năng
 
 Với mỗi từ khóa trong từ điển, thuật toán tính khoảng cách trong thời gian O(m × n), với m và n là độ dài hai chuỗi. Quy hoạch động chỉ giữ hai hàng kết quả, nên bộ nhớ cho mỗi lần tính khoảng cách là O(min(m, n)). Việc quét toàn bộ từ điển được thực hiện cho mỗi truy vấn. Cần đo thời gian trên máy chạy demo để báo cáo tốc độ thực tế.
+
+## Backend
+
+Thư mục `backend/` chứa REST API (FastAPI) bọc thuật toán trong `algorithm.py`, nạp từ điển một lần khi khởi động và trả về gợi ý qua HTTP.
+
+    cd backend
+    pip install -r requirements-dev.txt
+    uvicorn app.main:app --reload
+
+- Gợi ý: `POST /api/v1/suggest` với body `{"query": "điện thoại samsng", "limit": 5}`
+- Theo hợp đồng trong `UI/src/API_List.md`: `GET /health`, `GET /search/suggest`, `GET /search`, `GET /dictionary`, `GET /dictionary/stats`, `GET /algorithm/distance`, `POST /algorithm/visualize`, `POST /benchmark/runs`, `GET /benchmark/runs/{run_id}`, `GET /benchmark/runs/{run_id}/export`
+- Tài liệu tương tác: <http://127.0.0.1:8000/docs>
+- Trang demo: <http://127.0.0.1:8000/>
+
+Nhờ lọc ứng viên bằng trigram và quy hoạch động có chặn, thời gian phản hồi điển hình khoảng 3–25 ms thay vì quét toàn bộ từ điển mỗi truy vấn; kết quả vẫn trùng khớp tuyệt đối với `algorithm.py` (có test đối chiếu). Chi tiết kiến trúc, API và số đo hiệu năng: [`backend/README.md`](backend/README.md).
+
+Báo cáo phần backend: [`report/bao-cao-backend.md`](report/bao-cao-backend.md) (kèm bản DOCX/PDF trong cùng thư mục; tạo lại bằng `python report/build_docx.py` hoặc `python report/build_pdf.py`).
