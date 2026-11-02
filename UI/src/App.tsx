@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import './styles/app.css'
 import { Sidebar } from './components/layout/Sidebar'
 import { SearchPage } from './components/search/SearchPage'
-import { PlaceholderPage } from './components/common/PlaceholderPage'
+import { DictionaryPage } from './components/dictionary/DictionaryPage'
+import { PerformancePage } from './components/performance/PerformancePage'
+import { AlgorithmPage } from './components/algorithm/AlgorithmPage'
 import { fetchSuggestions, searchKeywords } from './services/searchService'
 import type { NavigationItem, Suggestion } from './types'
 
@@ -10,6 +12,7 @@ const navigation: NavigationItem[] = [
   { label: 'Tìm kiếm' },
   { label: 'Từ điển' },
   { label: 'Hiệu năng' },
+  { label: 'Thuật toán' },
 ]
 
 function App() {
@@ -103,9 +106,7 @@ function App() {
             onSearch={submitSearch}
             onSelectWord={setSelectedWord}
           />
-        ) : (
-          <PlaceholderPage pageName={activePage} onBack={() => setActivePage('Tìm kiếm')} />
-        )}
+        ) : activePage === 'Từ điển' ? <DictionaryPage /> : activePage === 'Hiệu năng' ? <PerformancePage /> : <AlgorithmPage />}
       </main>
     </div>
   )

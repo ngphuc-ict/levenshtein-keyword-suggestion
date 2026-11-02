@@ -1,0 +1,33 @@
+.algorithm-page h1 { margin: 0 0 18px; color: #292d28; font-size: 24px; font-weight: 600; }
+.algorithm-form { max-width: 700px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px; border: 1px solid #e2e4df; border-radius: 5px; background: #fff; }
+.algorithm-form > label:not(.normalize-option) { display: grid; gap: 6px; color: #656b63; font-size: 11px; }
+.algorithm-form > label:not(.normalize-option) input { height: 36px; padding: 0 9px; border: 1px solid #dfe2dc; border-radius: 4px; color: #343a33; font-size: 12px; }
+.normalize-option { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; color: #656b63; font-size: 11px; }
+.normalize-option input { accent-color: #3f6348; }
+.algorithm-actions { display: flex; gap: 8px; }
+.algorithm-actions button { min-height: 33px; padding: 0 11px; border: 0; border-radius: 4px; background: #3f6348; color: #fff; font-size: 11px; cursor: pointer; }
+.algorithm-actions .secondary-action { border: 1px solid #dfe2dc; background: #fff; color: #465047; }
+.algorithm-actions button:disabled { opacity: .55; cursor: wait; }
+.visualize-limit { align-self: center; color: #858b83; font-size: 10px; }
+.distance-result { max-width: 700px; display: flex; align-items: center; gap: 12px; margin-top: 12px; padding: 12px; border: 1px solid #e2e4df; border-radius: 5px; background: #fff; }
+.distance-result span { color: #656b63; font-size: 11px; }
+.distance-result strong { color: #3f6348; font-size: 21px; }
+.distance-result small { margin-left: auto; color: #858b83; font-size: 10px; }
+.visualization-result { max-width: 700px; margin-top: 18px; }
+.visualization-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+.visualization-heading h2 { margin: 0; color: #343a33; font-size: 14px; font-weight: 600; }
+.visualization-heading span { color: #656b63; font-size: 11px; }
+.matrix-scroll { max-width: 100%; overflow: auto; border: 1px solid #e2e4df; border-radius: 5px; background: #fff; }
+.dp-matrix { border-collapse: collapse; color: #555b54; font-size: 11px; text-align: center; }
+.dp-matrix th, .dp-matrix td { min-width: 31px; height: 30px; padding: 4px; border-right: 1px solid #eceeea; border-bottom: 1px solid #eceeea; }
+.dp-matrix th { position: sticky; top: 0; background: #f5f6f3; font-weight: 600; }
+.dp-matrix tbody th { left: 0; }
+.dp-matrix .path-cell { background: #dfeadd; color: #254b30; font-weight: 700; }
+.edit-steps { display: grid; gap: 8px; margin-top: 12px; color: #555b54; font-size: 11px; }
+.edit-steps > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.edit-step { padding: 5px 7px; border: 1px solid #e2e4df; border-radius: 4px; background: #fff; color: #666d64; font-size: 10px; }
+@media (max-width: 560px) {
+  .algorithm-form { grid-template-columns: 1fr; }
+  .normalize-option { grid-column: auto; }
+  .distance-result { flex-wrap: wrap; }.distance-result small { margin-left: 0; }
+}

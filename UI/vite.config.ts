@@ -11,6 +11,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/search': 'http://127.0.0.1:8000',
+      '/dictionary': 'http://127.0.0.1:8000',
+      '/benchmark': 'http://127.0.0.1:8000',
+      '/algorithm': 'http://127.0.0.1:8000',
     },
   },
 })

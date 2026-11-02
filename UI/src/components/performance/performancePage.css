@@ -1,0 +1,40 @@
+.performance-title { max-width: 700px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.performance-title h1 { margin: 0; color: #292d28; font-size: 24px; font-weight: 600; }
+.performance-title button { border: 1px solid #dfe2dc; border-radius: 4px; padding: 7px 10px; background: #fff; color: #465047; font-size: 11px; cursor: pointer; }
+.performance-title button:disabled { color: #999; }
+.performance-metrics, .benchmark-summary { max-width: 700px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.metric-card { min-height: 69px; display: flex; flex-direction: column; justify-content: center; gap: 7px; padding: 10px; border: 1px solid #e2e4df; border-radius: 5px; background: #fff; }
+.metric-card span { color: #858b83; font-size: 10px; }
+.metric-card strong { color: #343a33; font-size: 15px; font-weight: 600; }
+.algorithm-info { max-width: 700px; display: grid; gap: 5px; margin: 10px 0 24px; padding: 11px 12px; border: 1px solid #e2e4df; border-radius: 5px; color: #858b83; font-size: 10px; }
+.algorithm-info strong { color: #454c44; font-size: 12px; }
+.benchmark-panel { max-width: 700px; border: 1px solid #e2e4df; border-radius: 5px; background: #fff; }
+.benchmark-heading { padding: 14px 12px 0; }
+.benchmark-heading h2 { margin: 0; color: #343a33; font-size: 15px; font-weight: 600; }
+.benchmark-heading p { margin: 6px 0 0; color: #858b83; font-size: 11px; }
+.benchmark-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px; }
+.benchmark-controls label { display: flex; align-items: center; gap: 6px; color: #656b63; font-size: 11px; }
+.benchmark-controls input { accent-color: #3f6348; }
+.benchmark-controls button { min-height: 32px; padding: 0 11px; border: 0; border-radius: 4px; background: #3f6348; color: #fff; font-size: 11px; cursor: pointer; }
+.benchmark-controls button:disabled { opacity: .6; cursor: wait; }
+.benchmark-lookup { display: flex; gap: 7px; padding: 0 12px 12px; }
+.benchmark-lookup input { min-width: 0; flex: 1; height: 32px; padding: 0 8px; border: 1px solid #dfe2dc; border-radius: 4px; font-size: 11px; }
+.benchmark-lookup button { padding: 0 10px; border: 1px solid #dfe2dc; border-radius: 4px; background: #fff; color: #465047; font-size: 11px; cursor: pointer; }
+.benchmark-lookup button:disabled { color: #a9aea7; cursor: default; }
+.benchmark-results { padding: 0 12px 12px; }
+.benchmark-run-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; color: #777e74; font-size: 10px; }
+.benchmark-summary { grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); margin-bottom: 12px; }
+.benchmark-summary .metric-card { min-height: 58px; }
+.benchmark-summary .metric-card strong { font-size: 13px; }
+.benchmark-table { border: 1px solid #eceeea; border-radius: 4px; }
+.benchmark-row { min-height: 36px; display: grid; grid-template-columns: minmax(120px,1.2fr) 65px 90px minmax(120px,1fr) 45px; align-items: center; gap: 8px; padding: 0 8px; border-bottom: 1px solid #eceeea; color: #666d64; font-size: 10px; }
+.benchmark-row:last-child { border-bottom: 0; }
+.benchmark-query { overflow: hidden; color: #343a33; text-overflow: ellipsis; white-space: nowrap; }
+.benchmark-suggestions { overflow: hidden; color: #858b83; text-overflow: ellipsis; white-space: nowrap; }
+.benchmark-export { display: inline-block; margin-top: 10px; color: #3f6348; font-size: 11px; text-decoration: none; }
+.benchmark-export:hover { text-decoration: underline; }
+@media (max-width: 560px) {
+  .performance-metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .benchmark-row { grid-template-columns: minmax(90px,1fr) 55px 65px minmax(80px,1fr) 35px; gap: 4px; font-size: 9px; }
+  .benchmark-match { display: none; }
+}
