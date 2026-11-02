@@ -1,0 +1,5 @@
+#root { min-height: 100vh; }
+.app-shell { min-height: 100vh; display: flex; background: #fff; }
+.main-area { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+.content { width: min(700px, calc(100% - 64px)); margin: 0 auto; flex: 1; padding-top: 56px; }
+@media (max-width: 760px) { .app-shell { flex-direction: column; }.content { width: calc(100% - 32px); padding-top: 28px; } }

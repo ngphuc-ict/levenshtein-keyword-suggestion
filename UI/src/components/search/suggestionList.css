@@ -1,0 +1,9 @@
+.suggestion-list { max-width: 640px; overflow: hidden; border: 1px solid #e2e4df; border-radius: 5px; background: white; }
+.suggestion-row { width: 100%; min-height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 8px 12px; border: 0; border-bottom: 1px solid #eceeea; background: #fff; text-align: left; cursor: pointer; }
+.suggestion-row:last-child { border-bottom: 0; }
+.suggestion-row:hover { background: #f7f8f5; }
+.suggestion-main { min-width: 0; display: grid; gap: 4px; }
+.suggestion-main strong { color: #343a33; font-size: 13px; font-weight: 600; }
+.suggestion-main small { overflow: hidden; color: #858b83; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.distance-value { flex: none; color: #777e74; font-size: 11px; }
+.empty-state { padding: 18px 12px; color: #858b83; font-size: 12px; }

@@ -1,0 +1,3 @@
+.definition-card { max-width: 640px; padding: 16px; border: 1px solid #e2e4df; border-radius: 5px; background: white; }
+.definition-card h3 { margin: 0; color: #343a33; font-size: 16px; font-weight: 600; }
+.definition-text { margin: 10px 0 0; color: #656b63; font-size: 13px; line-height: 1.6; }
