@@ -1,3 +1,5 @@
 .search-content h1 { margin: 0 0 18px; color: #292d28; font-size: 24px; font-weight: 600; letter-spacing: 0; }
 .results-heading { margin: 24px 0 10px; }
 .search-content h2 { margin: 0; color: #555b54; font-size: 14px; font-weight: 500; }
+.request-status, .request-error { max-width: 640px; padding: 12px; color: #777e74; font-size: 12px; }
+.request-error { color: #a33d32; }

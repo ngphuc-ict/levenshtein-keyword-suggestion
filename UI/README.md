@@ -1,78 +1,28 @@
-# React + TypeScript + Vite
+# UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Chạy cùng backend
 
-Currently, two official plugins are available:
+1. Khởi động backend từ thư mục `backend`:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+   ```bash
+   uvicorn app.main:app --reload --no-access-log
+   ```
 
-## React Compiler
+2. Khởi động giao diện từ thư mục `UI`:
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+Trong môi trường phát triển, Vite chuyển tiếp các request `/search` tới
+`http://127.0.0.1:8000`. Có thể đặt `VITE_API_BASE_URL` để dùng địa chỉ backend
+khác, ví dụ `VITE_API_BASE_URL=https://api.example.com`.
 
-## Expanding the ESLint configuration
+## API đang dùng
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `GET /search/suggest?q=...&limit=5`: gợi ý từ gần đúng, gọi sau khi ngừng gõ 250 ms.
+- `GET /search?q=...&limit=20&mode=contains`: tìm chuỗi khi nhấn nút Tìm hoặc Enter.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+Client nằm trong `src/services/searchService.ts`; URL gốc được lấy từ
+`VITE_API_BASE_URL`.

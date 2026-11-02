@@ -1,13 +1,11 @@
-import type { Word } from '../../types'
 import './wordDefinition.css'
 
-type WordDefinitionProps = { word: Word }
+type WordDefinitionProps = { word: string }
 
 export function WordDefinition({ word }: WordDefinitionProps) {
   return (
     <article className="definition-card">
-      <h3>{word.word}</h3>
-      <p className="definition-text">{word.definition}</p>
+      <h3>{word}</h3>
     </article>
   )
 }

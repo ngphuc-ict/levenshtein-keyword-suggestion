@@ -1,7 +1,7 @@
-import type { Suggestion, Word } from '../../types'
+import type { Suggestion } from '../../types'
 import './suggestionList.css'
 
-type SuggestionListProps = { suggestions: Suggestion[]; onSelect: (word: Word) => void }
+type SuggestionListProps = { suggestions: Suggestion[]; onSelect: (word: string) => void }
 
 export function SuggestionList({ suggestions, onSelect }: SuggestionListProps) {
   if (!suggestions.length) {
@@ -11,8 +11,8 @@ export function SuggestionList({ suggestions, onSelect }: SuggestionListProps) {
   return (
     <div className="suggestion-list">
       {suggestions.map((item) => (
-        <button className="suggestion-row" key={item.word} onClick={() => onSelect(item)}>
-          <span className="suggestion-main"><strong>{item.word}</strong><small>{item.definition}</small></span>
+        <button className="suggestion-row" key={item.keyword} onClick={() => onSelect(item.keyword)}>
+          <span className="suggestion-main"><strong>{item.keyword}</strong></span>
           <span className="distance-value">{item.distance}</span>
         </button>
       ))}
