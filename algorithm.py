@@ -67,6 +67,40 @@ class LevenshteinSuggester:
             previous = current
         return previous[-1]
 
+    @staticmethod
+    def fold_accents(text: str) -> str:
+        """Bỏ dấu tiếng Việt (đ -> d) để gõ thiếu dấu vẫn khớp."""
+        decomposed = unicodedata.normalize("NFD", text)
+        stripped = "".join(c for c in decomposed if unicodedata.category(c) != "Mn")
+        return stripped.replace("đ", "d")
+
+    @staticmethod
+    def prefix_distance(query: str, keyword: str) -> int:
+        """Khoảng cách nhỏ nhất từ query tới một *tiền tố* của keyword.
+
+        Dùng cùng bảng quy hoạch động như levenshtein_distance, nhưng thay vì
+        lấy ô cuối cùng D[m][n] ta lấy min D[m][j] trên hàng cuối (j = 0..n).
+        Nhờ vậy truy vấn đang gõ dở như "điện tho" khớp với "điện thoại ...".
+        """
+        previous = list(range(len(keyword) + 1))
+        for row, query_char in enumerate(query, start=1):
+            current = [row]
+            for column, keyword_char in enumerate(keyword, start=1):
+                current.append(
+                    min(
+                        current[column - 1] + 1,
+                        previous[column] + 1,
+                        previous[column - 1] + (query_char != keyword_char),
+                    )
+                )
+            previous = current
+        return min(previous)
+
+    @staticmethod
+    def starts_a_word(query: str, keyword: str) -> bool:
+        """True nếu query xuất hiện ở đầu một từ của keyword."""
+        return (" " + query) in (" " + keyword)
+
     def rank_suggestions(
         self,
         query: str,
@@ -75,9 +109,12 @@ class LevenshteinSuggester:
     ) -> List[Suggestion]:
         """Trả về tối đa limit gợi ý gần nhất, cùng khoảng cách chỉnh sửa.
 
-        Khi khoảng cách bằng nhau, xếp theo chữ cái để kết quả không phụ
-        thuộc thứ tự duyệt của set hoặc nguồn từ điển. Từ khóa trùng sau
-        chuẩn hóa chỉ được tính một lần.
+        distance là khoảng cách từ truy vấn tới tiền tố gần nhất của từ khóa.
+        Khoảng cách tính trên chuỗi đã bỏ dấu. Thứ tự xếp hạng: (distance,
+        không bắt đầu một từ trùng truy vấn, khoảng cách tiền tố có dấu,
+        khoảng cách toàn chuỗi, chữ cái) nên kết quả không phụ thuộc thứ tự
+        duyệt của set hoặc nguồn từ điển. Từ khóa trùng sau chuẩn hóa chỉ
+        được tính một lần.
         """
         if limit <= 0 or not isinstance(query, str):
             return []
@@ -85,6 +122,7 @@ class LevenshteinSuggester:
         if not normalized_query or dictionary is None:
             return []
 
+        folded_query = self.fold_accents(normalized_query)
         seen = set()
         scored = []
         for entry in dictionary:
@@ -92,16 +130,21 @@ class LevenshteinSuggester:
             if not candidate or candidate in seen:
                 continue
             seen.add(candidate)
+            folded = self.fold_accents(candidate)
             scored.append(
-                Suggestion(
-                    keyword=candidate,
-                    distance=self.levenshtein_distance(normalized_query, candidate),
+                (
+                    self.prefix_distance(folded_query, folded),
+                    not self.starts_a_word(folded_query, folded),
+                    self.prefix_distance(normalized_query, candidate),
+                    self.levenshtein_distance(normalized_query, candidate),
+                    candidate,
                 )
             )
 
-        return heapq.nsmallest(
-            limit, scored, key=lambda item: (item.distance, item.keyword)
-        )
+        return [
+            Suggestion(keyword=item[-1], distance=item[0])
+            for item in heapq.nsmallest(limit, scored)
+        ]
 
     def suggest(
         self,

@@ -28,3 +28,15 @@ def normalize_text(text: object) -> str:
     normalized = unicodedata.normalize("NFC", text).lower()
     normalized = _PUNCTUATION.sub("", normalized)
     return _WHITESPACE.sub(" ", normalized).strip()
+
+
+def fold_accents(text: str) -> str:
+    """Bỏ dấu tiếng Việt (``đ`` → ``d``); độ dài chuỗi NFC không đổi."""
+    decomposed = unicodedata.normalize("NFD", text)
+    stripped = "".join(ch for ch in decomposed if unicodedata.category(ch) != "Mn")
+    return stripped.replace("đ", "d")
+
+
+def starts_a_word(query: str, keyword: str) -> bool:
+    """True nếu ``query`` xuất hiện ở đầu một từ của ``keyword``."""
+    return (" " + query) in (" " + keyword)

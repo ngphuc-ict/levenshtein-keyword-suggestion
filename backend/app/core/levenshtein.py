@@ -1,6 +1,6 @@
 """Khoảng cách chỉnh sửa Levenshtein theo quy hoạch động.
 
-Module cung cấp hai hàm:
+Module cung cấp các hàm:
 
 ``levenshtein_distance``
     Bản quy hoạch động chuẩn như ``algorithm.py`` của repo: thời gian
@@ -148,6 +148,43 @@ def bounded_levenshtein_distance(source: str, target: str, max_distance: int) ->
     else:  # pragma: no cover - không xảy ra khi |m - n| <= limit
         result = out_of_band
     return result if result <= limit else out_of_band
+
+
+def prefix_levenshtein_distance(query: str, keyword: str, max_distance: int | None = None) -> int:
+    """Khoảng cách từ ``query`` tới *tiền tố* gần nhất của ``keyword``.
+
+    Cùng bảng quy hoạch động như ``levenshtein_distance`` nhưng lấy
+    ``min D[m][j]`` trên hàng cuối thay vì ô ``D[m][n]``, nên truy vấn đang gõ
+    dở ("điện tho") khớp với "điện thoại ...".
+
+    Với ``max_distance`` (``k``): tiền tố tối ưu dài tối đa ``m + k`` nên chỉ
+    cần xét ``m + k`` ký tự đầu của ``keyword``, và dừng sớm khi cả một hàng
+    đều ``> k``. Khi đó trả về ``k + 1`` nếu khoảng cách thật lớn hơn ``k``.
+    """
+    if max_distance is not None:
+        if max_distance < 0:
+            raise ValueError("max_distance phải là số nguyên không âm")
+        keyword = keyword[: len(query) + max_distance]
+
+    previous = list(range(len(keyword) + 1))
+    for row, query_char in enumerate(query, start=1):
+        current = [row]
+        for column, keyword_char in enumerate(keyword, start=1):
+            current.append(
+                min(
+                    current[column - 1] + 1,
+                    previous[column] + 1,
+                    previous[column - 1] + (query_char != keyword_char),
+                )
+            )
+        previous = current
+        if max_distance is not None and min(previous) > max_distance:
+            return max_distance + 1
+
+    result = min(previous)
+    if max_distance is not None and result > max_distance:
+        return max_distance + 1
+    return result
 
 
 def levenshtein_matrix(source: str, target: str) -> list[list[int]]:

@@ -1,7 +1,9 @@
+import os
+
 from algorithm import LevenshteinSuggester
 from data_processor import DictionaryProcessor
 
-dictionary_path = "E:\\PT&TKGT\\levenshtein-keyword-suggestion\\dictionary.txt"
+dictionary_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dictionary.txt")
 suggester = LevenshteinSuggester()
 
 # Kiểm tra khoảng cách chỉnh sửa

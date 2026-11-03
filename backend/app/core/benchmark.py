@@ -22,9 +22,9 @@ from collections import OrderedDict
 from dataclasses import dataclass
 
 from .dictionary import KeywordDictionary
-from .levenshtein import levenshtein_distance
+from .levenshtein import levenshtein_distance, prefix_levenshtein_distance
 from .suggester import KeywordSuggester
-from .text import normalize_text
+from .text import fold_accents, normalize_text, starts_a_word
 
 DEFAULT_QUERIES: tuple[str, ...] = (
     "điện thoại samsng",
@@ -77,11 +77,21 @@ def naive_top_k(
     ``(distance, keyword)``. Chậm hơn nhiều nhưng là bản gốc của nhóm.
     """
     normalized = normalize_text(query)
-    scored = [
-        (levenshtein_distance(normalized, keyword), keyword) for keyword in dictionary.keywords
-    ]
-    scored.sort(key=lambda item: (item[0], item[1]))
-    return tuple((keyword, distance) for distance, keyword in scored[:limit])
+    folded_query = fold_accents(normalized)
+    scored = []
+    for keyword in dictionary.keywords:
+        folded = fold_accents(keyword)
+        scored.append(
+            (
+                prefix_levenshtein_distance(folded_query, folded),
+                not starts_a_word(folded_query, folded),
+                prefix_levenshtein_distance(normalized, keyword),
+                levenshtein_distance(normalized, keyword),
+                keyword,
+            )
+        )
+    scored.sort()
+    return tuple((item[-1], item[0]) for item in scored[:limit])
 
 
 def _percentile(values: list[float], fraction: float) -> float:
