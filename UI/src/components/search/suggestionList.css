@@ -1,9 +1,12 @@
-.suggestion-list { max-width: 640px; overflow: hidden; border: 1px solid #e2e4df; border-radius: 5px; background: white; }
-.suggestion-row { width: 100%; min-height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 8px 12px; border: 0; border-bottom: 1px solid #eceeea; background: #fff; text-align: left; cursor: pointer; }
+.suggestion-list { overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.suggestion-row { width: 100%; min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 20px; border: 0; border-bottom: 1px solid var(--border); background: var(--surface); color: var(--text); text-align: left; cursor: pointer; }
 .suggestion-row:last-child { border-bottom: 0; }
-.suggestion-row:hover { background: #f7f8f5; }
-.suggestion-main { min-width: 0; display: grid; gap: 4px; }
-.suggestion-main strong { color: #343a33; font-size: 13px; font-weight: 600; }
-.suggestion-main small { overflow: hidden; color: #858b83; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
-.distance-value { flex: none; color: #777e74; font-size: 11px; }
-.empty-state { padding: 18px 12px; color: #858b83; font-size: 12px; }
+.suggestion-row:hover { background: var(--subtle); }
+.suggestion-row:focus-visible { outline-offset: -4px; }
+.suggestion-main { min-width: 0; overflow-wrap: anywhere; }
+.suggestion-main strong { font-size: 15px; font-weight: 550; }
+.distance-value { min-width: 30px; height: 30px; display: grid; place-items: center; flex: none; padding-inline: 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--subtle); color: var(--accent); font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+.empty-state { display: flex; flex-direction: column; align-items: center; padding: 36px 24px; text-align: center; }
+.empty-symbol { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--subtle); color: var(--accent); font-size: 21px; letter-spacing: -.06em; }
+.empty-state strong { color: var(--text); font-size: 14px; font-weight: 600; }
+.empty-state p { max-width: 35ch; margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; }

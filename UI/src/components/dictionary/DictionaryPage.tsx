@@ -43,9 +43,12 @@ export function DictionaryPage() {
   return (
     <section className="content dictionary-page">
       <h1>Từ điển</h1>
+      <p className="page-description">Khám phá bộ từ khóa, lọc theo nội dung và sắp xếp theo cách bạn muốn.</p>
       <div className="dictionary-controls">
-        <input value={query} onChange={(event) => updateQuery(event.target.value)} placeholder="Lọc từ khóa..." aria-label="Lọc từ khóa" />
-        <select value={sort} onChange={(event) => setSort(event.target.value as 'alphabet' | 'length')} aria-label="Sắp xếp từ khóa">
+        <label className="control-label" htmlFor="dictionary-filter">Lọc từ khóa</label>
+        <input id="dictionary-filter" value={query} onChange={(event) => updateQuery(event.target.value)} placeholder="Lọc từ khóa..." aria-label="Lọc từ khóa" />
+        <label className="sort-label" htmlFor="dictionary-sort">Sắp xếp</label>
+        <select id="dictionary-sort" value={sort} onChange={(event) => setSort(event.target.value as 'alphabet' | 'length')} aria-label="Sắp xếp từ khóa">
           <option value="alphabet">A–Z</option>
           <option value="length">Theo độ dài</option>
         </select>

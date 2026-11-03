@@ -42,6 +42,7 @@ export function AlgorithmPage() {
   return (
     <section className="content algorithm-page">
       <h1>Thuật toán</h1>
+      <p className="page-description">So sánh hai từ và khám phá từng bước tính khoảng cách Levenshtein.</p>
       <form className="algorithm-form" onSubmit={calculateDistance}>
         <label>Từ nguồn<input value={source} onChange={(event) => setSource(event.target.value)} maxLength={200} required /></label>
         <label>Từ đích<input value={target} onChange={(event) => setTarget(event.target.value)} maxLength={200} required /></label>

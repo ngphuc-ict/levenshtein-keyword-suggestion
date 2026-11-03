@@ -1,11 +1,55 @@
 :root {
-  font-family: Arial, sans-serif;
-  color: #292d28;
-  background: #fff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--canvas);
+  --canvas: #f7f9f7;
+  --surface: #fdfefd;
+  --subtle: #eef3ee;
+  --sidebar: #f0f4f0;
+  --text: #202e28;
+  --muted: #596b60;
+  --border: #d9e3db;
+  --accent: #315e46;
+  --accent-hover: #244c36;
+  --accent-soft: #e1ece3;
+  --on-accent: #f8fcf9;
+  --error: #a43434;
+  --error-bg: #fcf0ef;
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 * { box-sizing: border-box; }
-body { min-width: 320px; min-height: 100vh; margin: 0; }
-button, input { font: inherit; }
+body { min-width: 320px; min-height: 100dvh; margin: 0; }
+button, input, select { font: inherit; }
+button { touch-action: manipulation; }
+button, a, input, select { -webkit-tap-highlight-color: transparent; }
+button { transition: background-color .18s ease, border-color .18s ease, transform .18s ease; }
+button:not(:disabled):active { transform: translateY(1px); }
+button:disabled { opacity: .55; cursor: not-allowed; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+input, select { accent-color: var(--accent); }
+input::placeholder { color: var(--muted); opacity: 1; }
+::selection { background: var(--accent-soft); color: var(--text); }
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --canvas: #141c18;
+    --surface: #1b2520;
+    --subtle: #222f27;
+    --sidebar: #18221c;
+    --text: #e5eee7;
+    --muted: #a7baac;
+    --border: #35483b;
+    --accent: #9ac7a7;
+    --accent-hover: #b3d9bd;
+    --accent-soft: #2c4132;
+    --on-accent: #17271c;
+    --error: #f3aaa5;
+    --error-bg: #382523;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

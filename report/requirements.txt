@@ -1,3 +1,0 @@
-# Chỉ cần để tạo lại báo cáo từ Markdown
-python-docx>=1.1
-reportlab>=4.0

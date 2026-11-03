@@ -1,40 +1,39 @@
-.performance-title { max-width: 700px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-.performance-title h1 { margin: 0; color: #292d28; font-size: 24px; font-weight: 600; }
-.performance-title button { border: 1px solid #dfe2dc; border-radius: 4px; padding: 7px 10px; background: #fff; color: #465047; font-size: 11px; cursor: pointer; }
-.performance-title button:disabled { color: #999; }
-.performance-metrics, .benchmark-summary { max-width: 700px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-.metric-card { min-height: 69px; display: flex; flex-direction: column; justify-content: center; gap: 7px; padding: 10px; border: 1px solid #e2e4df; border-radius: 5px; background: #fff; }
-.metric-card span { color: #858b83; font-size: 10px; }
-.metric-card strong { color: #343a33; font-size: 15px; font-weight: 600; }
-.algorithm-info { max-width: 700px; display: grid; gap: 5px; margin: 10px 0 24px; padding: 11px 12px; border: 1px solid #e2e4df; border-radius: 5px; color: #858b83; font-size: 10px; }
-.algorithm-info strong { color: #454c44; font-size: 12px; }
-.benchmark-panel { max-width: 700px; border: 1px solid #e2e4df; border-radius: 5px; background: #fff; }
-.benchmark-heading { padding: 14px 12px 0; }
-.benchmark-heading h2 { margin: 0; color: #343a33; font-size: 15px; font-weight: 600; }
-.benchmark-heading p { margin: 6px 0 0; color: #858b83; font-size: 11px; }
-.benchmark-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px; }
-.benchmark-controls label { display: flex; align-items: center; gap: 6px; color: #656b63; font-size: 11px; }
-.benchmark-controls input { accent-color: #3f6348; }
-.benchmark-controls button { min-height: 32px; padding: 0 11px; border: 0; border-radius: 4px; background: #3f6348; color: #fff; font-size: 11px; cursor: pointer; }
-.benchmark-controls button:disabled { opacity: .6; cursor: wait; }
-.benchmark-lookup { display: flex; gap: 7px; padding: 0 12px 12px; }
-.benchmark-lookup input { min-width: 0; flex: 1; height: 32px; padding: 0 8px; border: 1px solid #dfe2dc; border-radius: 4px; font-size: 11px; }
-.benchmark-lookup button { padding: 0 10px; border: 1px solid #dfe2dc; border-radius: 4px; background: #fff; color: #465047; font-size: 11px; cursor: pointer; }
-.benchmark-lookup button:disabled { color: #a9aea7; cursor: default; }
-.benchmark-results { padding: 0 12px 12px; }
-.benchmark-run-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; color: #777e74; font-size: 10px; }
-.benchmark-summary { grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); margin-bottom: 12px; }
-.benchmark-summary .metric-card { min-height: 58px; }
-.benchmark-summary .metric-card strong { font-size: 13px; }
-.benchmark-table { border: 1px solid #eceeea; border-radius: 4px; }
-.benchmark-row { min-height: 36px; display: grid; grid-template-columns: minmax(120px,1.2fr) 65px 90px minmax(120px,1fr) 45px; align-items: center; gap: 8px; padding: 0 8px; border-bottom: 1px solid #eceeea; color: #666d64; font-size: 10px; }
+.performance-title { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.performance-title h1 { margin: 0; }
+.performance-title button, .benchmark-lookup button { min-height: 40px; padding: 0 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); font-size: 12px; white-space: nowrap; cursor: pointer; }
+.performance-title button:not(:disabled):hover, .benchmark-lookup button:not(:disabled):hover { background: var(--accent-soft); }
+.performance-metrics, .benchmark-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.metric-card { min-width: 0; min-height: 108px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.metric-card span { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.metric-card strong { color: var(--text); font-size: clamp(18px, 2vw, 26px); font-weight: 600; letter-spacing: -.04em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.performance-metrics .metric-card:first-child { background: var(--accent-soft); }
+.algorithm-info { display: grid; gap: 8px; margin: 20px 0 32px; padding: 20px; border-left: 2px solid var(--accent); background: var(--subtle); color: var(--muted); font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
+.algorithm-info strong { color: var(--accent); font-size: 14px; }
+.benchmark-panel { margin-top: 28px; padding: 24px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); }
+.benchmark-heading h2 { margin: 0; color: var(--text); font-size: 20px; font-weight: 600; letter-spacing: -.025em; }
+.benchmark-heading p { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.benchmark-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 0; }
+.benchmark-controls label { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.benchmark-controls input { width: 16px; height: 16px; flex: none; }
+.benchmark-controls button { min-height: 44px; flex: none; padding: 0 18px; border: 0; border-radius: 8px; background: var(--accent); color: var(--on-accent); font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.benchmark-controls button:not(:disabled):hover { background: var(--accent-hover); }
+.benchmark-lookup { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding-top: 20px; border-top: 1px solid var(--border); }
+.benchmark-lookup label { grid-column: 1 / -1; color: var(--muted); font-size: 12px; font-weight: 600; }
+.benchmark-lookup input { width: 100%; min-width: 0; height: 44px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--canvas); color: var(--text); font-size: 13px; }
+.benchmark-results { min-width: 0; margin-top: 24px; }
+.benchmark-run-meta { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; color: var(--muted); font-family: ui-monospace, Consolas, monospace; font-size: 11px; }
+.benchmark-run-meta > span { min-width: 0; overflow-wrap: anywhere; }
+.benchmark-summary { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); margin-bottom: 20px; }
+.benchmark-summary .metric-card { min-height: 88px; background: var(--canvas); }
+.benchmark-summary .metric-card strong { font-size: 20px; }
+.benchmark-table { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+.benchmark-row { min-width: 620px; min-height: 48px; display: grid; grid-template-columns: minmax(120px, 1.2fr) 75px 100px minmax(120px, 1fr) 45px; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
 .benchmark-row:last-child { border-bottom: 0; }
-.benchmark-query { overflow: hidden; color: #343a33; text-overflow: ellipsis; white-space: nowrap; }
-.benchmark-suggestions { overflow: hidden; color: #858b83; text-overflow: ellipsis; white-space: nowrap; }
-.benchmark-export { display: inline-block; margin-top: 10px; color: #3f6348; font-size: 11px; text-decoration: none; }
-.benchmark-export:hover { text-decoration: underline; }
-@media (max-width: 560px) {
-  .performance-metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .benchmark-row { grid-template-columns: minmax(90px,1fr) 55px 65px minmax(80px,1fr) 35px; gap: 4px; font-size: 9px; }
-  .benchmark-match { display: none; }
-}
+.benchmark-row:nth-child(even) { background: var(--canvas); }
+.benchmark-query, .benchmark-suggestions { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.benchmark-query { color: var(--text); font-weight: 600; }
+.benchmark-match { color: var(--accent); }
+.benchmark-export { flex: none; padding: 8px 0; color: var(--accent); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; text-underline-offset: 4px; }
+@media (max-width: 1024px) { .performance-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 767px) { .benchmark-panel { padding: 18px; }.metric-card { padding: 16px; }.benchmark-controls { align-items: flex-start; flex-direction: column; }.benchmark-controls button { width: 100%; } }
+@media (max-width: 480px) { .benchmark-lookup { grid-template-columns: minmax(0, 1fr); }.benchmark-lookup input { font-size: 12px; } }
