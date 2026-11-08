@@ -45,8 +45,8 @@ def stats_payload(app: FastAPI) -> dict:
         "algorithm": {
             "name": "Levenshtein",
             "distance": "quy hoạch động, hai hàng, O(m*n)",
-            "candidate_filter": "chỉ mục trigram, ngưỡng tăng dần",
-            "bounded_distance": "dải chéo (Ukkonen), O(m*ngưỡng)",
+            "candidate_filter": "trie tiền tố, ngưỡng tăng dần, cắt nhánh",
+            "bounded_distance": "khoảng cách tiền tố không dấu, cột DP dùng chung",
             "default_limit": 5,
             "max_limit": 20,
         },

@@ -50,7 +50,8 @@ def test_suggest_respects_max_distance(client) -> None:
 
     assert response.status_code == 200
     payload = response.json()
-    assert payload["count"] == 1
+    assert payload["count"] >= 1
+    assert all(item["distance"] <= 1 for item in payload["suggestions"])
     assert payload["max_distance"] == 1
 
 

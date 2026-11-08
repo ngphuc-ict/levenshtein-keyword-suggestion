@@ -7,9 +7,9 @@ import random
 import pytest
 
 from app.core.dictionary import KeywordDictionary
-from app.core.levenshtein import levenshtein_distance
+from app.core.levenshtein import levenshtein_distance, prefix_levenshtein_distance
 from app.core.suggester import KeywordSuggester
-from app.core.text import normalize_text
+from app.core.text import fold_accents, normalize_text, starts_a_word
 
 SAMPLE_WORDS = [
     "điện thoại samsung",
@@ -35,10 +35,18 @@ SAMPLE_WORDS = [
 
 def naive_top(dictionary: KeywordDictionary, query: str, limit: int):
     normalized = normalize_text(query)
+    folded_query = fold_accents(normalized)
     scored = sorted(
-        (levenshtein_distance(normalized, keyword), keyword) for keyword in dictionary.keywords
+        (
+            prefix_levenshtein_distance(folded_query, fold_accents(keyword)),
+            not starts_a_word(folded_query, fold_accents(keyword)),
+            prefix_levenshtein_distance(normalized, keyword),
+            levenshtein_distance(normalized, keyword),
+            keyword,
+        )
+        for keyword in dictionary.keywords
     )
-    return scored[:limit]
+    return [(item[0], item[-1]) for item in scored[:limit]]
 
 
 @pytest.fixture()
@@ -83,6 +91,26 @@ def test_tie_break_is_lexicographic() -> None:
     ]
 
 
+def test_accent_insensitive_query() -> None:
+    dictionary = KeywordDictionary(["balo cũ", "bàn phím cơ", "điện thoại samsung"])
+    suggester = KeywordSuggester(dictionary, cache_size=0)
+
+    assert suggester.suggest("ban", limit=1).suggestions[0].keyword == "bàn phím cơ"
+    top = suggester.suggest("dien thoai samsng", limit=1).suggestions[0]
+    assert (top.keyword, top.distance) == ("điện thoại samsung", 1)
+
+
+def test_partial_query_matches_prefix(suggester: KeywordSuggester) -> None:
+    """Gõ dở vẫn gợi ý theo tiền tố, không bị từ khóa ngắn lấn át."""
+    result = suggester.suggest("tai nghe blu", limit=3)
+    assert result.suggestions[0].keyword == "tai nghe bluetooth"
+    assert result.suggestions[0].distance == 0
+
+    dictionary = KeywordDictionary(["usb cũ", "điện thoại samsung văn phòng"])
+    one_letter = KeywordSuggester(dictionary, cache_size=0).suggest("v", limit=1)
+    assert one_letter.suggestions[0].keyword == "điện thoại samsung văn phòng"
+
+
 def test_limit_and_empty_cases(suggester: KeywordSuggester) -> None:
     assert suggester.suggest("điện thoại", limit=0).suggestions == ()
     assert len(suggester.suggest("điện thoại", limit=2).suggestions) == 2
@@ -93,7 +121,8 @@ def test_limit_and_empty_cases(suggester: KeywordSuggester) -> None:
 def test_max_distance_filters_results(suggester: KeywordSuggester) -> None:
     result = suggester.suggest("điện thoại samsng", limit=5, max_distance=1)
     assert all(item.distance <= 1 for item in result.suggestions)
-    assert len(result.suggestions) == 1
+    assert result.suggestions[0].keyword == "điện thoại samsung"
+    assert len(result.suggestions) == 4  # mọi "điện thoại samsung ..." đều cách 1 phép
 
     none_found = suggester.suggest("xyzxyzxyz", limit=5, max_distance=0)
     assert none_found.suggestions == ()

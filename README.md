@@ -74,6 +74,12 @@ Có thể chạy các kiểm tra cơ bản bằng cách tạo tệp check_algori
 
 Chạy bằng python check_algorithm.py.
 
+## Khoảng cách theo tiền tố (gõ dở)
+
+Khi người dùng mới gõ vài ký tự (ví dụ `v`, `dien tho`), so với cả từ khóa thì từ khóa ngắn nhất luôn thắng. Vì vậy `distance` trong `rank_suggestions` là khoảng cách từ truy vấn tới **tiền tố gần nhất** của từ khóa: dùng cùng bảng quy hoạch động nhưng lấy `min D[m][j]` trên hàng cuối thay vì ô `D[m][n]`. Thứ tự xếp hạng: khoảng cách tiền tố, rồi từ khóa có từ bắt đầu bằng truy vấn, rồi khoảng cách toàn chuỗi, rồi chữ cái. Truy vấn đủ dài như `điện thoại samsng` vẫn cho `điện thoại samsung` đứng đầu.
+
+Việc so khớp thực hiện trên chuỗi **đã bỏ dấu**, nên gõ `dien thoai samsng` hay `ban` vẫn ra `điện thoại samsung…` / `bàn…`; khi bằng điểm, từ khóa khớp cả dấu được xếp trước. Backend duyệt từ điển bằng **trie** (các từ khóa chung tiền tố dùng chung cột quy hoạch động, cắt nhánh khi vượt ngưỡng) nên mỗi truy vấn chỉ mất vài mili giây, kể cả truy vấn xa từ vựng (~60–100 ms thay vì ~1 s) mà kết quả vẫn trùng khớp `algorithm.py`.
+
 ## Chuẩn hóa và tiếng Việt
 
 Thuật toán chuẩn hóa Unicode về NFC, chuyển thành chữ thường, bỏ dấu câu và gộp khoảng trắng. Dấu tiếng Việt được giữ nguyên. Vì khoảng cách được tính trực tiếp trên ký tự Unicode, truy vấn có dấu thường phù hợp hơn với từ điển có dấu; ví dụ dùng điện thoại samsng thay vì dien thoai samsng.
@@ -95,6 +101,22 @@ Thư mục `backend/` chứa REST API (FastAPI) bọc thuật toán trong `algor
 - Tài liệu tương tác: <http://127.0.0.1:8000/docs>
 - Trang demo: <http://127.0.0.1:8000/>
 
-Nhờ lọc ứng viên bằng trigram và quy hoạch động có chặn, thời gian phản hồi điển hình khoảng 3–25 ms thay vì quét toàn bộ từ điển mỗi truy vấn; kết quả vẫn trùng khớp tuyệt đối với `algorithm.py` (có test đối chiếu). Chi tiết kiến trúc, API và số đo hiệu năng: [`backend/README.md`](backend/README.md).
+Nhờ duyệt trie với quy hoạch động dùng chung cột và cắt nhánh, thời gian phản hồi điển hình khoảng 3–25 ms thay vì quét toàn bộ từ điển mỗi truy vấn; kết quả vẫn trùng khớp tuyệt đối với `algorithm.py` (có test đối chiếu). Chi tiết kiến trúc, API và số đo hiệu năng: [`backend/README.md`](backend/README.md).
 
 Báo cáo phần backend: [`report/bao-cao-backend.md`](report/bao-cao-backend.md) (kèm bản DOCX/PDF trong cùng thư mục; tạo lại bằng `python report/build_docx.py` hoặc `python report/build_pdf.py`).
+
+## Frontend
+
+Giao diện React + Vite nằm trong `UI/`, gọi API backend qua proxy của Vite
+(`/search`, `/dictionary`, `/algorithm`, `/benchmark`, `/health` → `127.0.0.1:8000`).
+
+    cd UI
+    npm install
+    npm run dev        # http://127.0.0.1:5173
+
+Cần backend chạy trước ở `http://127.0.0.1:8000`:
+
+    cd backend
+    uvicorn app.main:app --reload
+
+Trên Windows có thể chạy `run.bat` ở thư mục gốc để mở cả backend và UI; `health.bat` kiểm tra nhanh backend.

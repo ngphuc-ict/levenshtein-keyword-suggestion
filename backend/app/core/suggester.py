@@ -1,20 +1,20 @@
 """Bộ gợi ý từ khóa: xếp hạng top-k theo khoảng cách Levenshtein.
 
+``distance`` là khoảng cách từ truy vấn tới *tiền tố* gần nhất của từ khóa,
+tính trên chuỗi đã bỏ dấu, để truy vấn đang gõ dở hoặc thiếu dấu vẫn có gợi ý.
+
 Quy trình cho mỗi truy vấn:
 
-1. **Sinh ứng viên bằng trigram** (``index.TrigramIndex``): loại bỏ những từ
-   khóa chắc chắn xa hơn ngưỡng, kèm chứng minh không bỏ sót ứng viên.
-2. **Tính khoảng cách có chặn** (``bounded_levenshtein_distance``): chỉ cần
-   biết khoảng cách có vượt ngưỡng hay không, nên dùng bản dải chéo
-   ``O(len * ngưỡng)`` thay vì ``O(len^2)``.
-3. **Nới ngưỡng dần** 1, 2, 4, ... cho tới khi gom đủ ``k`` kết quả. Khi đã
-   đủ, mọi từ khóa có khoảng cách ``<=`` ngưỡng đều nằm trong tập ứng viên,
-   nên top-k thu được là *chính xác*, không phải gần đúng.
-4. Nếu bộ lọc trigram hết tác dụng (truy vấn quá ngắn hoặc quá xa từ điển),
-   chuyển sang quét theo nhóm độ dài — chậm hơn nhưng vẫn đúng.
+1. **Duyệt trie** (``trie.PrefixTrie``): các từ khóa chung tiền tố dùng chung
+   cột quy hoạch động, cắt cả nhánh khi cột vượt ngưỡng (chính xác, không gần đúng).
+2. **Nới ngưỡng dần** 1, 2, 3, 6, ... cho tới khi gom đủ ``k`` kết quả. Khi đã
+   đủ, mọi từ khóa có khoảng cách ``<=`` ngưỡng đều đã được tìm thấy nên top-k
+   là chính xác.
+3. **Phân hạng khi bằng điểm** trên chuỗi *có dấu* để từ có dấu đúng lên trước.
 
-Xếp hạng giống hệt ``algorithm.py`` của repo: theo ``(distance, keyword)``
-tăng dần, mỗi từ khóa chỉ tính một lần. Nhờ vậy kết quả backend trùng khớp
+Xếp hạng giống hệt ``algorithm.py`` của repo: theo ``(tiền tố không dấu,
+không bắt đầu một từ trùng truy vấn, tiền tố có dấu, toàn chuỗi,
+keyword)``. Nhờ vậy kết quả backend trùng khớp
 với bản thuật toán nhóm đã viết.
 """
 
@@ -28,9 +28,9 @@ from dataclasses import dataclass
 from typing import Any
 
 from .dictionary import KeywordDictionary
-from .index import TrigramIndex
-from .levenshtein import bounded_levenshtein_distance, levenshtein_distance
-from .text import normalize_text
+from .levenshtein import levenshtein_distance, prefix_levenshtein_distance
+from .text import fold_accents, normalize_text, starts_a_word
+from .trie import PrefixTrie
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,11 +107,12 @@ class _LRUCache:
 class KeywordSuggester:
     """Tìm tối đa ``limit`` từ khóa gần truy vấn nhất."""
 
-    __slots__ = ("_dictionary", "_index", "_cache")
+    __slots__ = ("_dictionary", "_folded", "_trie", "_cache")
 
     def __init__(self, dictionary: KeywordDictionary, cache_size: int = 1024) -> None:
         self._dictionary = dictionary
-        self._index = TrigramIndex(dictionary.keywords)
+        self._folded = [fold_accents(keyword) for keyword in dictionary.keywords]
+        self._trie = PrefixTrie(self._folded)
         self._cache = _LRUCache(cache_size)
 
     @property
@@ -179,109 +180,90 @@ class KeywordSuggester:
         limit: int,
         max_distance: int | None,
     ) -> tuple[tuple[Suggestion, ...], int]:
-        """Trả về top-k chính xác và số lần tính khoảng cách."""
-        distance_cap = max_distance
+        """Trả về top-k chính xác và số từ khóa đã đạt ngưỡng."""
+        folded_query = fold_accents(query)
         threshold = 1
 
         while True:
-            cutoff = threshold if distance_cap is None else min(threshold, distance_cap)
-            candidates = self._index.candidates(query, cutoff)
+            cutoff = threshold if max_distance is None else min(threshold, max_distance)
+            found = self._trie.search(folded_query, cutoff)
 
-            if candidates is None:
-                # Bộ lọc trigram không còn tác dụng: quét đầy đủ theo độ dài.
-                return self._scan_by_length(query, limit, distance_cap)
+            # Khoảng cách tiền tố luôn <= len(query), nên chạm mức đó là đã xét hết.
+            exhausted = cutoff >= len(query)
+            capped = max_distance is not None and cutoff >= max_distance
+            if len(found) >= limit or exhausted or capped:
+                return self._order(query, folded_query, found, limit), len(found)
 
-            scored: list[tuple[int, str]] = []
-            for keyword in candidates:
-                distance = bounded_levenshtein_distance(query, keyword, cutoff)
-                if distance <= cutoff:
-                    scored.append((distance, keyword))
+            threshold = threshold + 1 if threshold < 3 else threshold * 2
 
-            if len(scored) >= limit:
-                scored.sort()
-                return (
-                    tuple(
-                        Suggestion(keyword=keyword, distance=distance)
-                        for distance, keyword in scored[:limit]
-                    ),
-                    len(candidates),
-                )
-
-            if distance_cap is not None and cutoff >= distance_cap:
-                # Đã chạm trần max_distance: trả về những gì tìm được.
-                scored.sort()
-                return (
-                    tuple(
-                        Suggestion(keyword=keyword, distance=distance)
-                        for distance, keyword in scored
-                    ),
-                    len(candidates),
-                )
-
-            # Tăng dần từng đơn vị: ngưỡng càng sát khoảng cách thật thì
-            # tập ứng viên càng nhỏ, đổi lại thêm vài lượt sinh ứng viên rẻ.
-            threshold += 1
-
-    def _scan_by_length(
+    def _order(
         self,
         query: str,
+        folded_query: str,
+        found: dict[int, int],
         limit: int,
-        max_distance: int | None,
-    ) -> tuple[tuple[Suggestion, ...], int]:
-        """Quét từ khóa theo chênh lệch độ dài tăng dần (đường dự phòng).
+    ) -> tuple[Suggestion, ...]:
+        """Xếp theo (tiền tố không dấu, không bắt đầu một từ, rồi chọn theo dấu/toàn chuỗi)."""
+        keywords = self._dictionary.keywords
+        groups: dict[tuple[int, bool], list[str]] = {}
+        for word_id, distance in found.items():
+            key = (distance, not starts_a_word(folded_query, self._folded[word_id]))
+            groups.setdefault(key, []).append(keywords[word_id])
 
-        Với mọi chuỗi, ``distance >= |len(a) - len(b)|``. Khi đã có đủ
-        ``limit`` gợi ý và khoảng cách tệ nhất là ``d``, mọi nhóm lệch độ dài
-        hơn ``d`` bị bỏ qua. Đây cũng là lý do đường dự phòng vẫn nhanh với
-        truy vấn ngắn.
-        """
-        by_length = self._dictionary.by_length
-        lengths = self._dictionary.lengths
-        query_length = len(query)
-
-        best: list[tuple[int, str]] = []
-        evaluated = 0
-        threshold: int | None = max_distance
-        max_offset = max(lengths[-1] - query_length, query_length - lengths[0])
-        offset = 0
-
-        while offset <= max_offset:
-            if threshold is not None and offset > threshold:
+        result: list[Suggestion] = []
+        for key in sorted(groups):
+            need = limit - len(result)
+            if need <= 0:
                 break
+            for keyword in _select_with_accents(query, groups[key], need):
+                result.append(Suggestion(keyword=keyword, distance=key[0]))
+        return tuple(result)
 
-            if offset == 0:
-                candidate_lengths = (query_length,)
-            else:
-                candidate_lengths = (query_length - offset, query_length + offset)
 
-            for length in candidate_lengths:
-                bucket = by_length.get(length)
-                if not bucket:
-                    continue
-                for keyword in bucket:
-                    evaluated += 1
+def _select_with_accents(query: str, keywords: list[str], need: int) -> list[str]:
+    """``need`` từ khóa tốt nhất theo (tiền tố có dấu, toàn chuỗi, chữ cái)."""
+    bound = len(query)
+    top: list[int] = []
+    scored: list[tuple[int, str]] = []
+    for keyword in keywords:
+        distance = prefix_levenshtein_distance(query, keyword, bound)
+        if distance > bound:
+            continue
+        scored.append((distance, keyword))
+        insort(top, distance)
+        if len(top) > need:
+            top.pop()
+        if len(top) >= need:
+            bound = top[-1]
 
-                    if threshold is None:
-                        distance = levenshtein_distance(query, keyword)
-                    else:
-                        distance = bounded_levenshtein_distance(query, keyword, threshold)
-                        if distance > threshold:
-                            continue
-                        if len(best) >= limit and (distance, keyword) >= best[-1]:
-                            continue
+    levels: dict[int, list[str]] = {}
+    for distance, keyword in scored:
+        if distance <= top[-1]:
+            levels.setdefault(distance, []).append(keyword)
 
-                    insort(best, (distance, keyword))
-                    if len(best) > limit:
-                        best.pop()
+    result: list[str] = []
+    for distance in sorted(levels):
+        remaining = need - len(result)
+        if remaining <= 0:
+            break
+        result.extend(_best_by_full_distance(query, levels[distance], remaining))
+    return result
 
-                    if len(best) >= limit:
-                        threshold = best[-1][0]
-                        if max_distance is not None:
-                            threshold = min(threshold, max_distance)
 
-            offset += 1
+def _best_by_full_distance(query: str, keywords: list[str], need: int) -> list[str]:
+    """``need`` từ khóa có (khoảng cách toàn chuỗi, chữ cái) nhỏ nhất.
 
-        return (
-            tuple(Suggestion(keyword=keyword, distance=distance) for distance, keyword in best),
-            evaluated,
-        )
+    ``distance >= |len(a) - len(b)|`` nên duyệt theo chênh lệch độ dài tăng
+    dần và dừng ngay khi cận dưới đã vượt khoảng cách tệ nhất đang giữ,
+    tránh tính DP đầy đủ cho cả nhóm lớn.
+    """
+    query_length = len(query)
+    ordered = sorted(keywords, key=lambda keyword: (abs(len(keyword) - query_length), keyword))
+    best: list[tuple[int, str]] = []
+    for keyword in ordered:
+        if len(best) >= need and abs(len(keyword) - query_length) > best[-1][0]:
+            break
+        insort(best, (levenshtein_distance(query, keyword), keyword))
+        if len(best) > need:
+            best.pop()
+    return [keyword for _, keyword in best]
