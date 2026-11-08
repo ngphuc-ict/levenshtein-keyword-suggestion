@@ -1,6 +1,6 @@
 """Đối chiếu backend với bản thuật toán gốc trong repo (algorithm.py).
 
-Mục tiêu: bảo đảm phần tối ưu (chỉ mục trigram, quy hoạch động có chặn)
+Mục tiêu: bảo đảm phần tối ưu (trie tiền tố, quy hoạch động có chặn)
 không làm thay đổi kết quả so với cách làm ban đầu của nhóm.
 """
 
