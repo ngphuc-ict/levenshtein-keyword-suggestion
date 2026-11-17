@@ -27,10 +27,14 @@ function App() {
   useEffect(() => {
     const value = query.trim()
     if (!value) {
-      setSuggestions([])
-      setLoading(false)
-      setError('')
-      return
+      // Không gọi setState đồng bộ trong effect (React 19 khuyến cáo);
+      // dọn kết quả cũ ở tick kế tiếp thay vì ngay trong thân effect.
+      const resetTimeout = window.setTimeout(() => {
+        setSuggestions([])
+        setLoading(false)
+        setError('')
+      }, 0)
+      return () => window.clearTimeout(resetTimeout)
     }
 
     const requestId = ++requestSequence.current

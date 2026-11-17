@@ -10,6 +10,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
+      '/health': 'http://127.0.0.1:8000',
       '/search': 'http://127.0.0.1:8000',
       '/dictionary': 'http://127.0.0.1:8000',
       '/benchmark': 'http://127.0.0.1:8000',
