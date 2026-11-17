@@ -66,6 +66,7 @@ export function PerformancePage() {
   return (
     <section className="content performance-page">
       <div className="performance-title"><h1>Hiệu năng</h1><button onClick={refreshStats} disabled={loadingStats}>{loadingStats ? 'Đang tải...' : 'Làm mới'}</button></div>
+      <p className="page-description">Theo dõi dữ liệu từ điển và đo thời gian xử lý các truy vấn mẫu.</p>
       {error && <div className="page-error" role="alert">{error}</div>}
       {stats && (
         <>
@@ -90,7 +91,8 @@ export function PerformancePage() {
           <button onClick={startBenchmark} disabled={running}>{running ? 'Đang chạy...' : 'Chạy benchmark'}</button>
         </div>
         <div className="benchmark-lookup">
-          <input value={runId} onChange={(event) => setRunId(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void loadBenchmarkRun() }} placeholder="Nhập run_id để mở kết quả đã lưu" aria-label="Mã lần chạy benchmark" />
+          <label htmlFor="benchmark-run">Mở lần chạy đã lưu</label>
+          <input id="benchmark-run" value={runId} onChange={(event) => setRunId(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void loadBenchmarkRun() }} placeholder="Nhập run_id để mở kết quả đã lưu" aria-label="Mã lần chạy benchmark" />
           <button onClick={loadBenchmarkRun} disabled={running || !runId.trim()}>{running ? 'Đang tải...' : 'Mở kết quả'}</button>
         </div>
         {run && (

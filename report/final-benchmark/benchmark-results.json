@@ -1,0 +1,3944 @@
+{
+  "status": "completed",
+  "started_at": "2026-11-08T07:13:29.182566+00:00",
+  "git_commit": "75accab0ce777ad12e94c0a8fd8d04ccbd36c971",
+  "git_status_before": "?? package-lock.json\n?? report/",
+  "python_version": "3.14.8 (tags/v3.14.8:8e6e75d, Sep 30 2026, 18:19:33) [MSC v.1944 64 bit (AMD64)]",
+  "python_executable": "D:\\CMC year 3\\Ptich_tke_giai_thuat\\DeTai6\\levenshtein-keyword-suggestion\\backend\\.venv\\Scripts\\python.exe",
+  "hardware": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "processor": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD",
+    "logical_cpu_count": 16,
+    "ram_bytes": 16438382592,
+    "cpu": "AMD Ryzen 7 8745H with Radeon 780M Graphics"
+  },
+  "source_sha256": {
+    "algorithm.py": "f695ad325dbb6890e4fde6f0dfb38affb9788c4549cd5b2a6bd6d8a89d45f901",
+    "backend/app/core/suggester.py": "a3591167c956ced9f1c652513d3774e08faa6581260da136a989a234d861c419",
+    "backend/app/core/trie.py": "adb4a948d667d9f736d26b7c2da840cd8296313437372a84989a39eef09b9c10",
+    "backend/app/core/levenshtein.py": "11a239a89bbe88e42ed8ae17bc6a735e0cd120fed39387747c1f299098d1c082",
+    "backend/app/core/text.py": "ef8990faa431b14657544370922729cca1ddccede5cf89d41b3dbf84a6e14621",
+    "backend/app/core/dictionary.py": "b4b2263be4324d1bc1ed661dae813dea6d61d87c3d405bcfd6a86ac2e87e5e30",
+    "backend/benchmarks/benchmark.py": "bdabfb123629ec2b8756e2ee05b83b0fe988204eb710aa7afc711258ea185fe3"
+  },
+  "algorithm": {
+    "optimized": "KeywordSuggester: folded PrefixTrie + prefix DP + top-k ranking",
+    "baseline": "algorithm.LevenshteinSuggester.rank_suggestions: full dictionary scan, prefix/full DP, heapq.nsmallest",
+    "ranking": [
+      "folded_prefix_distance",
+      "not_starts_a_word",
+      "accented_prefix_distance",
+      "accented_full_distance",
+      "keyword"
+    ],
+    "trigram_used": false
+  },
+  "configuration": {
+    "queries": 20,
+    "runs": 3,
+    "top_k": 5,
+    "seed": 42,
+    "cache_size": 256,
+    "clear_cache_before_each_query": true,
+    "baseline_scope": "all 20 queries in each of 3 runs",
+    "timing": "perf_counter around each complete function call; no HTTP",
+    "p50": "statistics.median",
+    "p95": "existing percentile: sorted[round(0.95*(n-1))]",
+    "primary_statistics": "statistics over 20 per-query means across 3 runs"
+  },
+  "dataset": {
+    "path": "dictionary.txt",
+    "sha256": "aa5aa53656073c8701e266e627b4d809ae2b90f00451b94643ab06c41f2219f1",
+    "raw_lines": 23850,
+    "normalized_unique_keywords": 23850
+  },
+  "queries": [
+    "điện thoại samsng",
+    "tai nghe blutooth",
+    "áo thun akko",
+    "laptop dell i5",
+    "bàn phím cơ",
+    "điện thopại hp màu nâu",
+    "kínẽ cường lực cao cấp",
+    "túi xách iphoce màu xám",
+    "bàn di ẩchuột corsair màu hồng",
+    "webcamếrazer có dây",
+    "iện thoại opơo mà bạc",
+    "cáp ạc leogvo freeship",
+    "bàn phím raịzer ledrgb",
+    "laptop sandiskậmini",
+    "chuột không dây lsgòfreeship",
+    "mà hình sandisk màu ơneâu",
+    "kính cườg lực lenovo màu vàng",
+    "smartatch mcbook bluertooth",
+    "ốpẵlưậglsony chính hãng",
+    "sạc dự phòng ankeơ c dây"
+  ],
+  "runs": [
+    {
+      "run": 1,
+      "load_and_normalize_ms": 47.26490000030026,
+      "index_and_service_build_ms": 124.49089999972784,
+      "results": [
+        {
+          "query": "điện thoại samsng",
+          "optimized_ms": 2.024600000368082,
+          "baseline_ms": 3542.5716000008833,
+          "speedup": 1749.7637060934637,
+          "cached": false,
+          "evaluated_candidates": 31,
+          "optimized_top5": [
+            {
+              "keyword": "điện thoại samsung",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cũ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cơ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mới",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mini",
+              "distance": 1
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "điện thoại samsung",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cũ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cơ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mới",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mini",
+              "distance": 1
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "tai nghe blutooth",
+          "optimized_ms": 12.692199999946752,
+          "baseline_ms": 3546.0796000006667,
+          "speedup": 279.390460283918,
+          "cached": false,
+          "evaluated_candidates": 134,
+          "optimized_top5": [
+            {
+              "keyword": "tai nghe bluetooth",
+              "distance": 1
+            },
+            {
+              "keyword": "tai nghe hp bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe lg bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe jbl bluetooth",
+              "distance": 5
+            },
+            {
+              "keyword": "tai nghe msi bluetooth",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "tai nghe bluetooth",
+              "distance": 1
+            },
+            {
+              "keyword": "tai nghe hp bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe lg bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe jbl bluetooth",
+              "distance": 5
+            },
+            {
+              "keyword": "tai nghe msi bluetooth",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "áo thun akko",
+          "optimized_ms": 1.3707000016438542,
+          "baseline_ms": 2563.093200000367,
+          "speedup": 1869.9155153764489,
+          "cached": false,
+          "evaluated_candidates": 31,
+          "optimized_top5": [
+            {
+              "keyword": "áo thun akko",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mới",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mini",
+              "distance": 0
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "áo thun akko",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mới",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mini",
+              "distance": 0
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "laptop dell i5",
+          "optimized_ms": 2.319299999726354,
+          "baseline_ms": 2960.0889000012103,
+          "speedup": 1276.2854742165568,
+          "cached": false,
+          "evaluated_candidates": 30,
+          "optimized_top5": [
+            {
+              "keyword": "laptop dell 256gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell 512gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell cũ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell cơ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell mini",
+              "distance": 2
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "laptop dell 256gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell 512gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell cũ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell cơ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell mini",
+              "distance": 2
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "bàn phím cơ",
+          "optimized_ms": 15.270300000338466,
+          "baseline_ms": 2437.6231000005646,
+          "speedup": 159.63164443046534,
+          "cached": false,
+          "evaluated_candidates": 926,
+          "optimized_top5": [
+            {
+              "keyword": "bàn phím cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ hp",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ lg",
+              "distance": 0
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "bàn phím cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ hp",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ lg",
+              "distance": 0
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "điện thopại hp màu nâu",
+          "optimized_ms": 3.322200000184239,
+          "baseline_ms": 4553.3895999997185,
+          "speedup": 1370.5946661089645,
+          "cached": false,
+          "evaluated_candidates": 6,
+          "optimized_top5": [
+            {
+              "keyword": "điện thoại hp màu nâu",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại lg màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu xám",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu vàng",
+              "distance": 3
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "điện thoại hp màu nâu",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại lg màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu xám",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu vàng",
+              "distance": 3
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "kínẽ cường lực cao cấp",
+          "optimized_ms": 13.598100000308477,
+          "baseline_ms": 4577.835600000981,
+          "speedup": 336.6525911632604,
+          "cached": false,
+          "evaluated_candidates": 244,
+          "optimized_top5": [
+            {
+              "keyword": "kính cường lực cao cấp",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực hp cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực lg cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực jbl cao cấp",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "kính cường lực cao cấp",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực hp cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực lg cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực jbl cao cấp",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "túi xách iphoce màu xám",
+          "optimized_ms": 4.320500000176253,
+          "baseline_ms": 4704.921800001102,
+          "speedup": 1088.976229558886,
+          "cached": false,
+          "evaluated_candidates": 6,
+          "optimized_top5": [
+            {
+              "keyword": "túi xách iphone màu xám",
+              "distance": 1
+            },
+            {
+              "keyword": "túi xách iphone màu xanh",
+              "distance": 2
+            },
+            {
+              "keyword": "túi xách iphone màu tím",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu nâu",
+              "distance": 3
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "túi xách iphone màu xám",
+              "distance": 1
+            },
+            {
+              "keyword": "túi xách iphone màu xanh",
+              "distance": 2
+            },
+            {
+              "keyword": "túi xách iphone màu tím",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu nâu",
+              "distance": 3
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "bàn di ẩchuột corsair màu hồng",
+          "optimized_ms": 24.050500000157626,
+          "baseline_ms": 5857.105400000364,
+          "speedup": 243.53362300001982,
+          "cached": false,
+          "evaluated_candidates": 16,
+          "optimized_top5": [
+            {
+              "keyword": "bàn di chuột corsair màu hồng",
+              "distance": 1
+            },
+            {
+              "keyword": "bàn di chuột corsair màu vàng",
+              "distance": 3
+            },
+            {
+              "keyword": "bàn di chuột corsair màu trắng",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu xanh",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu đen",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "bàn di chuột corsair màu hồng",
+              "distance": 1
+            },
+            {
+              "keyword": "bàn di chuột corsair màu vàng",
+              "distance": 3
+            },
+            {
+              "keyword": "bàn di chuột corsair màu trắng",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu xanh",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu đen",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "webcamếrazer có dây",
+          "optimized_ms": 9.717699998873286,
+          "baseline_ms": 3670.577899998534,
+          "speedup": 377.7208496273931,
+          "cached": false,
+          "evaluated_candidates": 46,
+          "optimized_top5": [
+            {
+              "keyword": "webcam razer có dây",
+              "distance": 1
+            },
+            {
+              "keyword": "webcam anker có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam dareu có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam razer cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam akko có dây",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "webcam razer có dây",
+              "distance": 1
+            },
+            {
+              "keyword": "webcam anker có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam dareu có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam razer cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam akko có dây",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "iện thoại opơo mà bạc",
+          "optimized_ms": 11.78040000013425,
+          "baseline_ms": 4052.1291000004567,
+          "speedup": 343.9721146951104,
+          "cached": false,
+          "evaluated_candidates": 24,
+          "optimized_top5": [
+            {
+              "keyword": "điện thoại oppo màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại akko màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại ipad màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại oppo màu nâu",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "điện thoại oppo màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại akko màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại ipad màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại oppo màu nâu",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "cáp ạc leogvo freeship",
+          "optimized_ms": 12.49409999945783,
+          "baseline_ms": 4215.662700000394,
+          "speedup": 337.4122746082814,
+          "cached": false,
+          "evaluated_candidates": 7,
+          "optimized_top5": [
+            {
+              "keyword": "cáp sạc lenovo freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "cáp sạc lg freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc oppo freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc akko freeship",
+              "distance": 6
+            },
+            {
+              "keyword": "cáp sạc dell freeship",
+              "distance": 6
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "cáp sạc lenovo freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "cáp sạc lg freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc oppo freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc akko freeship",
+              "distance": 6
+            },
+            {
+              "keyword": "cáp sạc dell freeship",
+              "distance": 6
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "bàn phím raịzer ledrgb",
+          "optimized_ms": 15.820099999473314,
+          "baseline_ms": 4212.408299999879,
+          "speedup": 266.2693851581292,
+          "cached": false,
+          "evaluated_candidates": 26,
+          "optimized_top5": [
+            {
+              "keyword": "bàn phím razer led rgb",
+              "distance": 2
+            },
+            {
+              "keyword": "bàn phím anker led rgb",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn phím cơ razer led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím dareu led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím razer 128gb",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "bàn phím razer led rgb",
+              "distance": 2
+            },
+            {
+              "keyword": "bàn phím anker led rgb",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn phím cơ razer led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím dareu led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím razer 128gb",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "laptop sandiskậmini",
+          "optimized_ms": 13.467799999489216,
+          "baseline_ms": 3683.910300000207,
+          "speedup": 273.534675309993,
+          "cached": false,
+          "evaluated_candidates": 43,
+          "optimized_top5": [
+            {
+              "keyword": "laptop sandisk mini",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop sandisk mới",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk gaming",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk giá rẻ",
+              "distance": 4
+            },
+            {
+              "keyword": "laptop sandisk màu nâu",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "laptop sandisk mini",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop sandisk mới",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk gaming",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk giá rẻ",
+              "distance": 4
+            },
+            {
+              "keyword": "laptop sandisk màu nâu",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "chuột không dây lsgòfreeship",
+          "optimized_ms": 19.79399999981979,
+          "baseline_ms": 5306.734799998594,
+          "speedup": 268.0981509572046,
+          "cached": false,
+          "evaluated_candidates": 20,
+          "optimized_top5": [
+            {
+              "keyword": "chuột không dây lg freeship",
+              "distance": 2
+            },
+            {
+              "keyword": "chuột không dây msi freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "chuột không dây asus freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây hp freeship",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "chuột không dây lg freeship",
+              "distance": 2
+            },
+            {
+              "keyword": "chuột không dây msi freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "chuột không dây asus freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây hp freeship",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "mà hình sandisk màu ơneâu",
+          "optimized_ms": 16.11839999895892,
+          "baseline_ms": 4786.311600000772,
+          "speedup": 296.9470667256004,
+          "cached": false,
+          "evaluated_candidates": 10,
+          "optimized_top5": [
+            {
+              "keyword": "màn hình sandisk màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "màn hình sandisk màu đen",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu hồng",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu trắng",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "màn hình sandisk màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "màn hình sandisk màu đen",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu hồng",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu trắng",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "kính cườg lực lenovo màu vàng",
+          "optimized_ms": 14.29900000039197,
+          "baseline_ms": 5525.754800000868,
+          "speedup": 386.4434435869217,
+          "cached": false,
+          "evaluated_candidates": 21,
+          "optimized_top5": [
+            {
+              "keyword": "kính cường lực lenovo màu vàng",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực lenovo màu hồng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu trắng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu xanh",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu đen",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "kính cường lực lenovo màu vàng",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực lenovo màu hồng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu trắng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu xanh",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu đen",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "smartatch mcbook bluertooth",
+          "optimized_ms": 129.4852000009996,
+          "baseline_ms": 5120.4930000003515,
+          "speedup": 39.54500591543143,
+          "cached": false,
+          "evaluated_candidates": 98,
+          "optimized_top5": [
+            {
+              "keyword": "smartwatch macbook bluetooth",
+              "distance": 3
+            },
+            {
+              "keyword": "smartwatch akko bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch iphone bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch jbl bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch lenovo bluetooth",
+              "distance": 7
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "smartwatch macbook bluetooth",
+              "distance": 3
+            },
+            {
+              "keyword": "smartwatch akko bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch iphone bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch jbl bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch lenovo bluetooth",
+              "distance": 7
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "ốpẵlưậglsony chính hãng",
+          "optimized_ms": 122.46070000037435,
+          "baseline_ms": 4453.4507999997,
+          "speedup": 36.36636733242654,
+          "cached": false,
+          "evaluated_candidates": 482,
+          "optimized_top5": [
+            {
+              "keyword": "ốp lưng sony chính hãng",
+              "distance": 3
+            },
+            {
+              "keyword": "ổ cứng sony chính hãng",
+              "distance": 5
+            },
+            {
+              "keyword": "balo sony chính hãng",
+              "distance": 6
+            },
+            {
+              "keyword": "ốp lưng akko chính hãng",
+              "distance": 7
+            },
+            {
+              "keyword": "ốp lưng asus chính hãng",
+              "distance": 7
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "ốp lưng sony chính hãng",
+              "distance": 3
+            },
+            {
+              "keyword": "ổ cứng sony chính hãng",
+              "distance": 5
+            },
+            {
+              "keyword": "balo sony chính hãng",
+              "distance": 6
+            },
+            {
+              "keyword": "ốp lưng akko chính hãng",
+              "distance": 7
+            },
+            {
+              "keyword": "ốp lưng asus chính hãng",
+              "distance": 7
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "sạc dự phòng ankeơ c dây",
+          "optimized_ms": 19.190400000297814,
+          "baseline_ms": 4638.809100000799,
+          "speedup": 241.72550337297866,
+          "cached": false,
+          "evaluated_candidates": 73,
+          "optimized_top5": [
+            {
+              "keyword": "sạc dự phòng anker có dây",
+              "distance": 2
+            },
+            {
+              "keyword": "sạc dự phòng akko có dây",
+              "distance": 3
+            },
+            {
+              "keyword": "sạc dự phòng anker cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "sạc dự phòng anker cũ",
+              "distance": 5
+            },
+            {
+              "keyword": "sạc dự phòng anker cơ",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "sạc dự phòng anker có dây",
+              "distance": 2
+            },
+            {
+              "keyword": "sạc dự phòng akko có dây",
+              "distance": 3
+            },
+            {
+              "keyword": "sạc dự phòng anker cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "sạc dự phòng anker cũ",
+              "distance": 5
+            },
+            {
+              "keyword": "sạc dự phòng anker cơ",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        }
+      ],
+      "hard_query": {
+        "query": "nồi cơm điện tử",
+        "optimized_ms": 185.02400000033958,
+        "baseline_ms": 3477.79459999947,
+        "speedup": 18.796451271149078,
+        "cached": false,
+        "evaluated_candidates": 22589,
+        "optimized_top5": [
+          {
+            "keyword": "điện thoại cũ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại cơ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại hp",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại lg",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại akko",
+            "distance": 9
+          }
+        ],
+        "baseline_top5": [
+          {
+            "keyword": "điện thoại cũ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại cơ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại hp",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại lg",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại akko",
+            "distance": 9
+          }
+        ],
+        "parity": true
+      },
+      "optimized_statistics": {
+        "count": 20,
+        "mean_ms": 23.179810000056023,
+        "p50_ms": 13.532949999898847,
+        "p95_ms": 122.46070000037435,
+        "min_ms": 1.3707000016438542,
+        "max_ms": 129.4852000009996
+      },
+      "paired_all_20": {
+        "observations": 20,
+        "baseline_mean_ms": 4220.447560000321,
+        "optimized_mean_ms": 23.179810000056023,
+        "speedup": 182.07429482770223
+      },
+      "paired_fixed_5": {
+        "observations": 5,
+        "baseline_mean_ms": 3009.8912800007383,
+        "optimized_mean_ms": 6.735420000404702,
+        "speedup": 446.87506938244195
+      }
+    },
+    {
+      "run": 2,
+      "load_and_normalize_ms": 52.482099999906495,
+      "index_and_service_build_ms": 157.86780000053113,
+      "results": [
+        {
+          "query": "điện thoại samsng",
+          "optimized_ms": 2.092400000037742,
+          "baseline_ms": 3712.9714999991847,
+          "speedup": 1774.503679952309,
+          "cached": false,
+          "evaluated_candidates": 31,
+          "optimized_top5": [
+            {
+              "keyword": "điện thoại samsung",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cũ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cơ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mới",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mini",
+              "distance": 1
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "điện thoại samsung",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cũ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cơ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mới",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mini",
+              "distance": 1
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "tai nghe blutooth",
+          "optimized_ms": 11.089600000559585,
+          "baseline_ms": 3711.9438000008813,
+          "speedup": 334.7229656447099,
+          "cached": false,
+          "evaluated_candidates": 134,
+          "optimized_top5": [
+            {
+              "keyword": "tai nghe bluetooth",
+              "distance": 1
+            },
+            {
+              "keyword": "tai nghe hp bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe lg bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe jbl bluetooth",
+              "distance": 5
+            },
+            {
+              "keyword": "tai nghe msi bluetooth",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "tai nghe bluetooth",
+              "distance": 1
+            },
+            {
+              "keyword": "tai nghe hp bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe lg bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe jbl bluetooth",
+              "distance": 5
+            },
+            {
+              "keyword": "tai nghe msi bluetooth",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "áo thun akko",
+          "optimized_ms": 1.730299998598639,
+          "baseline_ms": 2682.4992000001657,
+          "speedup": 1550.3087338454072,
+          "cached": false,
+          "evaluated_candidates": 31,
+          "optimized_top5": [
+            {
+              "keyword": "áo thun akko",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mới",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mini",
+              "distance": 0
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "áo thun akko",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mới",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mini",
+              "distance": 0
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "laptop dell i5",
+          "optimized_ms": 2.3003999995125923,
+          "baseline_ms": 3068.647100000817,
+          "speedup": 1333.9623981268476,
+          "cached": false,
+          "evaluated_candidates": 30,
+          "optimized_top5": [
+            {
+              "keyword": "laptop dell 256gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell 512gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell cũ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell cơ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell mini",
+              "distance": 2
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "laptop dell 256gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell 512gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell cũ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell cơ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell mini",
+              "distance": 2
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "bàn phím cơ",
+          "optimized_ms": 16.787399999884656,
+          "baseline_ms": 2471.8331000003673,
+          "speedup": 147.24335513643274,
+          "cached": false,
+          "evaluated_candidates": 926,
+          "optimized_top5": [
+            {
+              "keyword": "bàn phím cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ hp",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ lg",
+              "distance": 0
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "bàn phím cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ hp",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ lg",
+              "distance": 0
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "điện thopại hp màu nâu",
+          "optimized_ms": 4.179800000201794,
+          "baseline_ms": 4615.669700000581,
+          "speedup": 1104.2800372691859,
+          "cached": false,
+          "evaluated_candidates": 6,
+          "optimized_top5": [
+            {
+              "keyword": "điện thoại hp màu nâu",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại lg màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu xám",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu vàng",
+              "distance": 3
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "điện thoại hp màu nâu",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại lg màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu xám",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu vàng",
+              "distance": 3
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "kínẽ cường lực cao cấp",
+          "optimized_ms": 13.637099998959457,
+          "baseline_ms": 4774.009299999307,
+          "speedup": 350.07511130398507,
+          "cached": false,
+          "evaluated_candidates": 244,
+          "optimized_top5": [
+            {
+              "keyword": "kính cường lực cao cấp",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực hp cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực lg cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực jbl cao cấp",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "kính cường lực cao cấp",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực hp cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực lg cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực jbl cao cấp",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "túi xách iphoce màu xám",
+          "optimized_ms": 4.894300000160001,
+          "baseline_ms": 4846.419100000276,
+          "speedup": 990.2170075070674,
+          "cached": false,
+          "evaluated_candidates": 6,
+          "optimized_top5": [
+            {
+              "keyword": "túi xách iphone màu xám",
+              "distance": 1
+            },
+            {
+              "keyword": "túi xách iphone màu xanh",
+              "distance": 2
+            },
+            {
+              "keyword": "túi xách iphone màu tím",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu nâu",
+              "distance": 3
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "túi xách iphone màu xám",
+              "distance": 1
+            },
+            {
+              "keyword": "túi xách iphone màu xanh",
+              "distance": 2
+            },
+            {
+              "keyword": "túi xách iphone màu tím",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu nâu",
+              "distance": 3
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "bàn di ẩchuột corsair màu hồng",
+          "optimized_ms": 22.671000000627828,
+          "baseline_ms": 6317.0676000008825,
+          "speedup": 278.64088923408514,
+          "cached": false,
+          "evaluated_candidates": 16,
+          "optimized_top5": [
+            {
+              "keyword": "bàn di chuột corsair màu hồng",
+              "distance": 1
+            },
+            {
+              "keyword": "bàn di chuột corsair màu vàng",
+              "distance": 3
+            },
+            {
+              "keyword": "bàn di chuột corsair màu trắng",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu xanh",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu đen",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "bàn di chuột corsair màu hồng",
+              "distance": 1
+            },
+            {
+              "keyword": "bàn di chuột corsair màu vàng",
+              "distance": 3
+            },
+            {
+              "keyword": "bàn di chuột corsair màu trắng",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu xanh",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu đen",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "webcamếrazer có dây",
+          "optimized_ms": 9.623300000384916,
+          "baseline_ms": 4011.565900000278,
+          "speedup": 416.8596946826787,
+          "cached": false,
+          "evaluated_candidates": 46,
+          "optimized_top5": [
+            {
+              "keyword": "webcam razer có dây",
+              "distance": 1
+            },
+            {
+              "keyword": "webcam anker có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam dareu có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam razer cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam akko có dây",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "webcam razer có dây",
+              "distance": 1
+            },
+            {
+              "keyword": "webcam anker có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam dareu có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam razer cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam akko có dây",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "iện thoại opơo mà bạc",
+          "optimized_ms": 11.681500000122469,
+          "baseline_ms": 4396.926999999778,
+          "speedup": 376.40089029265766,
+          "cached": false,
+          "evaluated_candidates": 24,
+          "optimized_top5": [
+            {
+              "keyword": "điện thoại oppo màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại akko màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại ipad màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại oppo màu nâu",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "điện thoại oppo màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại akko màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại ipad màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại oppo màu nâu",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "cáp ạc leogvo freeship",
+          "optimized_ms": 13.654200000019046,
+          "baseline_ms": 4618.707699999504,
+          "speedup": 338.26278361186024,
+          "cached": false,
+          "evaluated_candidates": 7,
+          "optimized_top5": [
+            {
+              "keyword": "cáp sạc lenovo freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "cáp sạc lg freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc oppo freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc akko freeship",
+              "distance": 6
+            },
+            {
+              "keyword": "cáp sạc dell freeship",
+              "distance": 6
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "cáp sạc lenovo freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "cáp sạc lg freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc oppo freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc akko freeship",
+              "distance": 6
+            },
+            {
+              "keyword": "cáp sạc dell freeship",
+              "distance": 6
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "bàn phím raịzer ledrgb",
+          "optimized_ms": 18.30580000023474,
+          "baseline_ms": 4585.732500001541,
+          "speedup": 250.5070797202382,
+          "cached": false,
+          "evaluated_candidates": 26,
+          "optimized_top5": [
+            {
+              "keyword": "bàn phím razer led rgb",
+              "distance": 2
+            },
+            {
+              "keyword": "bàn phím anker led rgb",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn phím cơ razer led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím dareu led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím razer 128gb",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "bàn phím razer led rgb",
+              "distance": 2
+            },
+            {
+              "keyword": "bàn phím anker led rgb",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn phím cơ razer led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím dareu led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím razer 128gb",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "laptop sandiskậmini",
+          "optimized_ms": 15.543800000159536,
+          "baseline_ms": 3969.85339999992,
+          "speedup": 255.39786924427585,
+          "cached": false,
+          "evaluated_candidates": 43,
+          "optimized_top5": [
+            {
+              "keyword": "laptop sandisk mini",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop sandisk mới",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk gaming",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk giá rẻ",
+              "distance": 4
+            },
+            {
+              "keyword": "laptop sandisk màu nâu",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "laptop sandisk mini",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop sandisk mới",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk gaming",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk giá rẻ",
+              "distance": 4
+            },
+            {
+              "keyword": "laptop sandisk màu nâu",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "chuột không dây lsgòfreeship",
+          "optimized_ms": 21.977100001095096,
+          "baseline_ms": 5965.391900001123,
+          "speedup": 271.436718206855,
+          "cached": false,
+          "evaluated_candidates": 20,
+          "optimized_top5": [
+            {
+              "keyword": "chuột không dây lg freeship",
+              "distance": 2
+            },
+            {
+              "keyword": "chuột không dây msi freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "chuột không dây asus freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây hp freeship",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "chuột không dây lg freeship",
+              "distance": 2
+            },
+            {
+              "keyword": "chuột không dây msi freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "chuột không dây asus freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây hp freeship",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "mà hình sandisk màu ơneâu",
+          "optimized_ms": 16.954200000327546,
+          "baseline_ms": 5264.207100000931,
+          "speedup": 310.49575325873406,
+          "cached": false,
+          "evaluated_candidates": 10,
+          "optimized_top5": [
+            {
+              "keyword": "màn hình sandisk màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "màn hình sandisk màu đen",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu hồng",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu trắng",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "màn hình sandisk màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "màn hình sandisk màu đen",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu hồng",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu trắng",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "kính cườg lực lenovo màu vàng",
+          "optimized_ms": 17.770499998732703,
+          "baseline_ms": 6106.066599999394,
+          "speedup": 343.606910353386,
+          "cached": false,
+          "evaluated_candidates": 21,
+          "optimized_top5": [
+            {
+              "keyword": "kính cường lực lenovo màu vàng",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực lenovo màu hồng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu trắng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu xanh",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu đen",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "kính cường lực lenovo màu vàng",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực lenovo màu hồng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu trắng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu xanh",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu đen",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "smartatch mcbook bluertooth",
+          "optimized_ms": 134.16310000138765,
+          "baseline_ms": 6114.489700001286,
+          "speedup": 45.57504783310794,
+          "cached": false,
+          "evaluated_candidates": 98,
+          "optimized_top5": [
+            {
+              "keyword": "smartwatch macbook bluetooth",
+              "distance": 3
+            },
+            {
+              "keyword": "smartwatch akko bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch iphone bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch jbl bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch lenovo bluetooth",
+              "distance": 7
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "smartwatch macbook bluetooth",
+              "distance": 3
+            },
+            {
+              "keyword": "smartwatch akko bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch iphone bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch jbl bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch lenovo bluetooth",
+              "distance": 7
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "ốpẵlưậglsony chính hãng",
+          "optimized_ms": 153.4100999997463,
+          "baseline_ms": 5264.488299999357,
+          "speedup": 34.316438748218424,
+          "cached": false,
+          "evaluated_candidates": 482,
+          "optimized_top5": [
+            {
+              "keyword": "ốp lưng sony chính hãng",
+              "distance": 3
+            },
+            {
+              "keyword": "ổ cứng sony chính hãng",
+              "distance": 5
+            },
+            {
+              "keyword": "balo sony chính hãng",
+              "distance": 6
+            },
+            {
+              "keyword": "ốp lưng akko chính hãng",
+              "distance": 7
+            },
+            {
+              "keyword": "ốp lưng asus chính hãng",
+              "distance": 7
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "ốp lưng sony chính hãng",
+              "distance": 3
+            },
+            {
+              "keyword": "ổ cứng sony chính hãng",
+              "distance": 5
+            },
+            {
+              "keyword": "balo sony chính hãng",
+              "distance": 6
+            },
+            {
+              "keyword": "ốp lưng akko chính hãng",
+              "distance": 7
+            },
+            {
+              "keyword": "ốp lưng asus chính hãng",
+              "distance": 7
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "sạc dự phòng ankeơ c dây",
+          "optimized_ms": 22.77429999958258,
+          "baseline_ms": 5275.2579000007245,
+          "speedup": 231.6320545569968,
+          "cached": false,
+          "evaluated_candidates": 73,
+          "optimized_top5": [
+            {
+              "keyword": "sạc dự phòng anker có dây",
+              "distance": 2
+            },
+            {
+              "keyword": "sạc dự phòng akko có dây",
+              "distance": 3
+            },
+            {
+              "keyword": "sạc dự phòng anker cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "sạc dự phòng anker cũ",
+              "distance": 5
+            },
+            {
+              "keyword": "sạc dự phòng anker cơ",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "sạc dự phòng anker có dây",
+              "distance": 2
+            },
+            {
+              "keyword": "sạc dự phòng akko có dây",
+              "distance": 3
+            },
+            {
+              "keyword": "sạc dự phòng anker cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "sạc dự phòng anker cũ",
+              "distance": 5
+            },
+            {
+              "keyword": "sạc dự phòng anker cơ",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        }
+      ],
+      "hard_query": {
+        "query": "nồi cơm điện tử",
+        "optimized_ms": 181.0497000005853,
+        "baseline_ms": 3382.9471999997622,
+        "speedup": 18.685185338549726,
+        "cached": false,
+        "evaluated_candidates": 22589,
+        "optimized_top5": [
+          {
+            "keyword": "điện thoại cũ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại cơ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại hp",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại lg",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại akko",
+            "distance": 9
+          }
+        ],
+        "baseline_top5": [
+          {
+            "keyword": "điện thoại cũ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại cơ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại hp",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại lg",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại akko",
+            "distance": 9
+          }
+        ],
+        "parity": true
+      },
+      "optimized_statistics": {
+        "count": 20,
+        "mean_ms": 25.762010000016744,
+        "p50_ms": 14.59900000008929,
+        "p95_ms": 134.16310000138765,
+        "min_ms": 1.730299998598639,
+        "max_ms": 153.4100999997463
+      },
+      "paired_all_20": {
+        "observations": 20,
+        "baseline_mean_ms": 4588.687420000315,
+        "optimized_mean_ms": 25.762010000016744,
+        "speedup": 178.11837740911258
+      },
+      "paired_fixed_5": {
+        "observations": 5,
+        "baseline_mean_ms": 3129.578940000283,
+        "optimized_mean_ms": 6.800019999718643,
+        "speedup": 460.2308434577799
+      }
+    },
+    {
+      "run": 3,
+      "load_and_normalize_ms": 57.92669999937061,
+      "index_and_service_build_ms": 155.09059999931196,
+      "results": [
+        {
+          "query": "điện thoại samsng",
+          "optimized_ms": 2.986100000271108,
+          "baseline_ms": 3906.769600000189,
+          "speedup": 1308.3184085079179,
+          "cached": false,
+          "evaluated_candidates": 31,
+          "optimized_top5": [
+            {
+              "keyword": "điện thoại samsung",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cũ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cơ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mới",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mini",
+              "distance": 1
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "điện thoại samsung",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cũ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung cơ",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mới",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại samsung mini",
+              "distance": 1
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "tai nghe blutooth",
+          "optimized_ms": 12.541000000055647,
+          "baseline_ms": 3469.4130000007135,
+          "speedup": 276.6456422921074,
+          "cached": false,
+          "evaluated_candidates": 134,
+          "optimized_top5": [
+            {
+              "keyword": "tai nghe bluetooth",
+              "distance": 1
+            },
+            {
+              "keyword": "tai nghe hp bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe lg bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe jbl bluetooth",
+              "distance": 5
+            },
+            {
+              "keyword": "tai nghe msi bluetooth",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "tai nghe bluetooth",
+              "distance": 1
+            },
+            {
+              "keyword": "tai nghe hp bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe lg bluetooth",
+              "distance": 4
+            },
+            {
+              "keyword": "tai nghe jbl bluetooth",
+              "distance": 5
+            },
+            {
+              "keyword": "tai nghe msi bluetooth",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "áo thun akko",
+          "optimized_ms": 1.1455000003479654,
+          "baseline_ms": 2419.628699999521,
+          "speedup": 2112.2904402134586,
+          "cached": false,
+          "evaluated_candidates": 31,
+          "optimized_top5": [
+            {
+              "keyword": "áo thun akko",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mới",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mini",
+              "distance": 0
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "áo thun akko",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mới",
+              "distance": 0
+            },
+            {
+              "keyword": "áo thun akko mini",
+              "distance": 0
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "laptop dell i5",
+          "optimized_ms": 2.063200001430232,
+          "baseline_ms": 2749.0758000003552,
+          "speedup": 1332.4330157496447,
+          "cached": false,
+          "evaluated_candidates": 30,
+          "optimized_top5": [
+            {
+              "keyword": "laptop dell 256gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell 512gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell cũ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell cơ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell mini",
+              "distance": 2
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "laptop dell 256gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell 512gb",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop dell cũ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell cơ",
+              "distance": 2
+            },
+            {
+              "keyword": "laptop dell mini",
+              "distance": 2
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "bàn phím cơ",
+          "optimized_ms": 15.783500000907225,
+          "baseline_ms": 2255.46310000027,
+          "speedup": 142.90006018124166,
+          "cached": false,
+          "evaluated_candidates": 926,
+          "optimized_top5": [
+            {
+              "keyword": "bàn phím cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ hp",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ lg",
+              "distance": 0
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "bàn phím cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cũ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ cơ",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ hp",
+              "distance": 0
+            },
+            {
+              "keyword": "bàn phím cơ lg",
+              "distance": 0
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "điện thopại hp màu nâu",
+          "optimized_ms": 2.9305999996722676,
+          "baseline_ms": 4261.637900001006,
+          "speedup": 1454.1861395200947,
+          "cached": false,
+          "evaluated_candidates": 6,
+          "optimized_top5": [
+            {
+              "keyword": "điện thoại hp màu nâu",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại lg màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu xám",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu vàng",
+              "distance": 3
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "điện thoại hp màu nâu",
+              "distance": 1
+            },
+            {
+              "keyword": "điện thoại lg màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu xám",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại hp màu vàng",
+              "distance": 3
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "kínẽ cường lực cao cấp",
+          "optimized_ms": 15.0272999999288,
+          "baseline_ms": 4268.752099998892,
+          "speedup": 284.06647235492187,
+          "cached": false,
+          "evaluated_candidates": 244,
+          "optimized_top5": [
+            {
+              "keyword": "kính cường lực cao cấp",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực hp cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực lg cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực jbl cao cấp",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "kính cường lực cao cấp",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực hp cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực lg cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "kính cường lực jbl cao cấp",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "túi xách iphoce màu xám",
+          "optimized_ms": 3.935899998396053,
+          "baseline_ms": 4420.853400000851,
+          "speedup": 1123.2128361499085,
+          "cached": false,
+          "evaluated_candidates": 6,
+          "optimized_top5": [
+            {
+              "keyword": "túi xách iphone màu xám",
+              "distance": 1
+            },
+            {
+              "keyword": "túi xách iphone màu xanh",
+              "distance": 2
+            },
+            {
+              "keyword": "túi xách iphone màu tím",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu nâu",
+              "distance": 3
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "túi xách iphone màu xám",
+              "distance": 1
+            },
+            {
+              "keyword": "túi xách iphone màu xanh",
+              "distance": 2
+            },
+            {
+              "keyword": "túi xách iphone màu tím",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "túi xách iphone màu nâu",
+              "distance": 3
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "bàn di ẩchuột corsair màu hồng",
+          "optimized_ms": 19.45709999927203,
+          "baseline_ms": 5732.584600000337,
+          "speedup": 294.62687657537947,
+          "cached": false,
+          "evaluated_candidates": 16,
+          "optimized_top5": [
+            {
+              "keyword": "bàn di chuột corsair màu hồng",
+              "distance": 1
+            },
+            {
+              "keyword": "bàn di chuột corsair màu vàng",
+              "distance": 3
+            },
+            {
+              "keyword": "bàn di chuột corsair màu trắng",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu xanh",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu đen",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "bàn di chuột corsair màu hồng",
+              "distance": 1
+            },
+            {
+              "keyword": "bàn di chuột corsair màu vàng",
+              "distance": 3
+            },
+            {
+              "keyword": "bàn di chuột corsair màu trắng",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu xanh",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn di chuột corsair màu đen",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "webcamếrazer có dây",
+          "optimized_ms": 7.965599999806727,
+          "baseline_ms": 3694.49529999838,
+          "speedup": 463.80627951290813,
+          "cached": false,
+          "evaluated_candidates": 46,
+          "optimized_top5": [
+            {
+              "keyword": "webcam razer có dây",
+              "distance": 1
+            },
+            {
+              "keyword": "webcam anker có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam dareu có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam razer cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam akko có dây",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "webcam razer có dây",
+              "distance": 1
+            },
+            {
+              "keyword": "webcam anker có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam dareu có dây",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam razer cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "webcam akko có dây",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "iện thoại opơo mà bạc",
+          "optimized_ms": 10.639599999194616,
+          "baseline_ms": 4087.2803999991447,
+          "speedup": 384.1573367709819,
+          "cached": false,
+          "evaluated_candidates": 24,
+          "optimized_top5": [
+            {
+              "keyword": "điện thoại oppo màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại akko màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại ipad màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại oppo màu nâu",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "điện thoại oppo màu bạc",
+              "distance": 3
+            },
+            {
+              "keyword": "điện thoại akko màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại hp màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại ipad màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "điện thoại oppo màu nâu",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "cáp ạc leogvo freeship",
+          "optimized_ms": 12.87410000077216,
+          "baseline_ms": 4214.415099999314,
+          "speedup": 327.3560947752886,
+          "cached": false,
+          "evaluated_candidates": 7,
+          "optimized_top5": [
+            {
+              "keyword": "cáp sạc lenovo freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "cáp sạc lg freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc oppo freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc akko freeship",
+              "distance": 6
+            },
+            {
+              "keyword": "cáp sạc dell freeship",
+              "distance": 6
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "cáp sạc lenovo freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "cáp sạc lg freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc oppo freeship",
+              "distance": 5
+            },
+            {
+              "keyword": "cáp sạc akko freeship",
+              "distance": 6
+            },
+            {
+              "keyword": "cáp sạc dell freeship",
+              "distance": 6
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "bàn phím raịzer ledrgb",
+          "optimized_ms": 16.246099999989383,
+          "baseline_ms": 4238.731299999927,
+          "speedup": 260.9076209061065,
+          "cached": false,
+          "evaluated_candidates": 26,
+          "optimized_top5": [
+            {
+              "keyword": "bàn phím razer led rgb",
+              "distance": 2
+            },
+            {
+              "keyword": "bàn phím anker led rgb",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn phím cơ razer led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím dareu led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím razer 128gb",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "bàn phím razer led rgb",
+              "distance": 2
+            },
+            {
+              "keyword": "bàn phím anker led rgb",
+              "distance": 4
+            },
+            {
+              "keyword": "bàn phím cơ razer led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím dareu led rgb",
+              "distance": 5
+            },
+            {
+              "keyword": "bàn phím razer 128gb",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "laptop sandiskậmini",
+          "optimized_ms": 11.615399998845533,
+          "baseline_ms": 3672.0678999990923,
+          "speedup": 316.13787733216793,
+          "cached": false,
+          "evaluated_candidates": 43,
+          "optimized_top5": [
+            {
+              "keyword": "laptop sandisk mini",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop sandisk mới",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk gaming",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk giá rẻ",
+              "distance": 4
+            },
+            {
+              "keyword": "laptop sandisk màu nâu",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "laptop sandisk mini",
+              "distance": 1
+            },
+            {
+              "keyword": "laptop sandisk mới",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk gaming",
+              "distance": 3
+            },
+            {
+              "keyword": "laptop sandisk giá rẻ",
+              "distance": 4
+            },
+            {
+              "keyword": "laptop sandisk màu nâu",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "chuột không dây lsgòfreeship",
+          "optimized_ms": 19.69009999993432,
+          "baseline_ms": 5339.520399998946,
+          "speedup": 271.17792190068906,
+          "cached": false,
+          "evaluated_candidates": 20,
+          "optimized_top5": [
+            {
+              "keyword": "chuột không dây lg freeship",
+              "distance": 2
+            },
+            {
+              "keyword": "chuột không dây msi freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "chuột không dây asus freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây hp freeship",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "chuột không dây lg freeship",
+              "distance": 2
+            },
+            {
+              "keyword": "chuột không dây msi freeship",
+              "distance": 3
+            },
+            {
+              "keyword": "chuột không dây asus freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây freeship",
+              "distance": 4
+            },
+            {
+              "keyword": "chuột không dây hp freeship",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "mà hình sandisk màu ơneâu",
+          "optimized_ms": 15.931100000670995,
+          "baseline_ms": 4822.091,
+          "speedup": 302.6841209832906,
+          "cached": false,
+          "evaluated_candidates": 10,
+          "optimized_top5": [
+            {
+              "keyword": "màn hình sandisk màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "màn hình sandisk màu đen",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu hồng",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu trắng",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "màn hình sandisk màu nâu",
+              "distance": 3
+            },
+            {
+              "keyword": "màn hình sandisk màu đen",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu bạc",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu hồng",
+              "distance": 5
+            },
+            {
+              "keyword": "màn hình sandisk màu trắng",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "kính cườg lực lenovo màu vàng",
+          "optimized_ms": 14.539699999659206,
+          "baseline_ms": 5525.64270000039,
+          "speedup": 380.0382882817324,
+          "cached": false,
+          "evaluated_candidates": 21,
+          "optimized_top5": [
+            {
+              "keyword": "kính cường lực lenovo màu vàng",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực lenovo màu hồng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu trắng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu xanh",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu đen",
+              "distance": 4
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "kính cường lực lenovo màu vàng",
+              "distance": 1
+            },
+            {
+              "keyword": "kính cường lực lenovo màu hồng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu trắng",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu xanh",
+              "distance": 3
+            },
+            {
+              "keyword": "kính cường lực lenovo màu đen",
+              "distance": 4
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "smartatch mcbook bluertooth",
+          "optimized_ms": 132.53910000094038,
+          "baseline_ms": 5130.739000000176,
+          "speedup": 38.71113505345798,
+          "cached": false,
+          "evaluated_candidates": 98,
+          "optimized_top5": [
+            {
+              "keyword": "smartwatch macbook bluetooth",
+              "distance": 3
+            },
+            {
+              "keyword": "smartwatch akko bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch iphone bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch jbl bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch lenovo bluetooth",
+              "distance": 7
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "smartwatch macbook bluetooth",
+              "distance": 3
+            },
+            {
+              "keyword": "smartwatch akko bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch iphone bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch jbl bluetooth",
+              "distance": 7
+            },
+            {
+              "keyword": "smartwatch lenovo bluetooth",
+              "distance": 7
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "ốpẵlưậglsony chính hãng",
+          "optimized_ms": 124.94859999969776,
+          "baseline_ms": 4441.381300001012,
+          "speedup": 35.54566677827327,
+          "cached": false,
+          "evaluated_candidates": 482,
+          "optimized_top5": [
+            {
+              "keyword": "ốp lưng sony chính hãng",
+              "distance": 3
+            },
+            {
+              "keyword": "ổ cứng sony chính hãng",
+              "distance": 5
+            },
+            {
+              "keyword": "balo sony chính hãng",
+              "distance": 6
+            },
+            {
+              "keyword": "ốp lưng akko chính hãng",
+              "distance": 7
+            },
+            {
+              "keyword": "ốp lưng asus chính hãng",
+              "distance": 7
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "ốp lưng sony chính hãng",
+              "distance": 3
+            },
+            {
+              "keyword": "ổ cứng sony chính hãng",
+              "distance": 5
+            },
+            {
+              "keyword": "balo sony chính hãng",
+              "distance": 6
+            },
+            {
+              "keyword": "ốp lưng akko chính hãng",
+              "distance": 7
+            },
+            {
+              "keyword": "ốp lưng asus chính hãng",
+              "distance": 7
+            }
+          ],
+          "parity": true
+        },
+        {
+          "query": "sạc dự phòng ankeơ c dây",
+          "optimized_ms": 19.252699999924516,
+          "baseline_ms": 4598.69819999949,
+          "speedup": 238.85991055890963,
+          "cached": false,
+          "evaluated_candidates": 73,
+          "optimized_top5": [
+            {
+              "keyword": "sạc dự phòng anker có dây",
+              "distance": 2
+            },
+            {
+              "keyword": "sạc dự phòng akko có dây",
+              "distance": 3
+            },
+            {
+              "keyword": "sạc dự phòng anker cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "sạc dự phòng anker cũ",
+              "distance": 5
+            },
+            {
+              "keyword": "sạc dự phòng anker cơ",
+              "distance": 5
+            }
+          ],
+          "baseline_top5": [
+            {
+              "keyword": "sạc dự phòng anker có dây",
+              "distance": 2
+            },
+            {
+              "keyword": "sạc dự phòng akko có dây",
+              "distance": 3
+            },
+            {
+              "keyword": "sạc dự phòng anker cao cấp",
+              "distance": 4
+            },
+            {
+              "keyword": "sạc dự phòng anker cũ",
+              "distance": 5
+            },
+            {
+              "keyword": "sạc dự phòng anker cơ",
+              "distance": 5
+            }
+          ],
+          "parity": true
+        }
+      ],
+      "hard_query": {
+        "query": "nồi cơm điện tử",
+        "optimized_ms": 177.3868999989645,
+        "baseline_ms": 2996.780499999659,
+        "speedup": 16.894035016211188,
+        "cached": false,
+        "evaluated_candidates": 22589,
+        "optimized_top5": [
+          {
+            "keyword": "điện thoại cũ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại cơ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại hp",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại lg",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại akko",
+            "distance": 9
+          }
+        ],
+        "baseline_top5": [
+          {
+            "keyword": "điện thoại cũ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại cơ",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại hp",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại lg",
+            "distance": 9
+          },
+          {
+            "keyword": "điện thoại akko",
+            "distance": 9
+          }
+        ],
+        "parity": true
+      },
+      "optimized_statistics": {
+        "count": 20,
+        "mean_ms": 23.105614999985846,
+        "p50_ms": 13.706900000215683,
+        "p95_ms": 124.94859999969776,
+        "min_ms": 1.1455000003479654,
+        "max_ms": 132.53910000094038
+      },
+      "paired_all_20": {
+        "observations": 20,
+        "baseline_mean_ms": 4162.4620399999,
+        "optimized_mean_ms": 23.105614999985846,
+        "speedup": 180.149372349641
+      },
+      "paired_fixed_5": {
+        "observations": 5,
+        "baseline_mean_ms": 2960.0700400002097,
+        "optimized_mean_ms": 6.903860000602435,
+        "speedup": 428.7558032378861
+      }
+    }
+  ],
+  "additional_parity_checks": [
+    {
+      "query": "dien thoai samsng",
+      "optimized_ms": 2.7745999996113824,
+      "baseline_ms": 3284.8479000003863,
+      "speedup": 1183.8996253371552,
+      "cached": false,
+      "evaluated_candidates": 31,
+      "optimized_top5": [
+        {
+          "keyword": "điện thoại samsung",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung cũ",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung cơ",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung mới",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung mini",
+          "distance": 1
+        }
+      ],
+      "baseline_top5": [
+        {
+          "keyword": "điện thoại samsung",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung cũ",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung cơ",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung mới",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung mini",
+          "distance": 1
+        }
+      ],
+      "parity": true
+    },
+    {
+      "query": "dien tho",
+      "optimized_ms": 13.932699999713805,
+      "baseline_ms": 1683.5678999996162,
+      "speedup": 120.83572459280677,
+      "cached": false,
+      "evaluated_candidates": 795,
+      "optimized_top5": [
+        {
+          "keyword": "điện thoại cũ",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại cơ",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại hp",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại lg",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại jbl",
+          "distance": 0
+        }
+      ],
+      "baseline_top5": [
+        {
+          "keyword": "điện thoại cũ",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại cơ",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại hp",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại lg",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại jbl",
+          "distance": 0
+        }
+      ],
+      "parity": true
+    },
+    {
+      "query": "điện tho",
+      "optimized_ms": 8.429199999227421,
+      "baseline_ms": 1722.367899999881,
+      "speedup": 204.33349548684868,
+      "cached": false,
+      "evaluated_candidates": 795,
+      "optimized_top5": [
+        {
+          "keyword": "điện thoại cũ",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại cơ",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại hp",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại lg",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại jbl",
+          "distance": 0
+        }
+      ],
+      "baseline_top5": [
+        {
+          "keyword": "điện thoại cũ",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại cơ",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại hp",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại lg",
+          "distance": 0
+        },
+        {
+          "keyword": "điện thoại jbl",
+          "distance": 0
+        }
+      ],
+      "parity": true
+    },
+    {
+      "query": "điện thoại samsng",
+      "optimized_ms": 2.907400001276983,
+      "baseline_ms": 3347.312800000509,
+      "speedup": 1151.3079722536659,
+      "cached": false,
+      "evaluated_candidates": 31,
+      "optimized_top5": [
+        {
+          "keyword": "điện thoại samsung",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung cũ",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung cơ",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung mới",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung mini",
+          "distance": 1
+        }
+      ],
+      "baseline_top5": [
+        {
+          "keyword": "điện thoại samsung",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung cũ",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung cơ",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung mới",
+          "distance": 1
+        },
+        {
+          "keyword": "điện thoại samsung mini",
+          "distance": 1
+        }
+      ],
+      "parity": true
+    }
+  ],
+  "errors": [],
+  "per_query_averages": [
+    {
+      "query": "điện thoại samsng",
+      "optimized_ms": 2.367700000225644,
+      "baseline_ms": 3720.7709000000855,
+      "speedup": 1571.4705831167346,
+      "parity": true
+    },
+    {
+      "query": "tai nghe blutooth",
+      "optimized_ms": 12.107600000187327,
+      "baseline_ms": 3575.8121333340873,
+      "speedup": 295.33616350711645,
+      "parity": true
+    },
+    {
+      "query": "áo thun akko",
+      "optimized_ms": 1.4155000001968194,
+      "baseline_ms": 2555.0737000000177,
+      "speedup": 1805.0679615999613,
+      "parity": true
+    },
+    {
+      "query": "laptop dell i5",
+      "optimized_ms": 2.2276333335563927,
+      "baseline_ms": 2925.937266667461,
+      "speedup": 1313.473461988573,
+      "parity": true
+    },
+    {
+      "query": "bàn phím cơ",
+      "optimized_ms": 15.94706666704345,
+      "baseline_ms": 2388.306433333734,
+      "speedup": 149.76462337549884,
+      "parity": true
+    },
+    {
+      "query": "điện thopại hp màu nâu",
+      "optimized_ms": 3.477533333352767,
+      "baseline_ms": 4476.899066667102,
+      "speedup": 1287.377758174017,
+      "parity": true
+    },
+    {
+      "query": "kínẽ cường lực cao cấp",
+      "optimized_ms": 14.087499999732245,
+      "baseline_ms": 4540.198999999727,
+      "speedup": 322.2856433069047,
+      "parity": true
+    },
+    {
+      "query": "túi xách iphoce màu xám",
+      "optimized_ms": 4.383566666244103,
+      "baseline_ms": 4657.398100000743,
+      "speedup": 1062.4677242541547,
+      "parity": true
+    },
+    {
+      "query": "bàn di ẩchuột corsair màu hồng",
+      "optimized_ms": 22.059533333352494,
+      "baseline_ms": 5968.919200000528,
+      "speedup": 270.5822969960989,
+      "parity": true
+    },
+    {
+      "query": "webcamếrazer có dây",
+      "optimized_ms": 9.10219999968831,
+      "baseline_ms": 3792.213033332397,
+      "speedup": 416.6259842084612,
+      "parity": true
+    },
+    {
+      "query": "iện thoại opơo mà bạc",
+      "optimized_ms": 11.367166666483778,
+      "baseline_ms": 4178.778833333126,
+      "speedup": 367.6183305778655,
+      "parity": true
+    },
+    {
+      "query": "cáp ạc leogvo freeship",
+      "optimized_ms": 13.007466666749679,
+      "baseline_ms": 4349.595166666404,
+      "speedup": 334.39218243665016,
+      "parity": true
+    },
+    {
+      "query": "bàn phím raịzer ledrgb",
+      "optimized_ms": 16.790666666565812,
+      "baseline_ms": 4345.624033333782,
+      "speedup": 258.8118816024707,
+      "parity": true
+    },
+    {
+      "query": "laptop sandiskậmini",
+      "optimized_ms": 13.542333332831427,
+      "baseline_ms": 3775.27719999974,
+      "speedup": 278.7759765776202,
+      "parity": true
+    },
+    {
+      "query": "chuột không dây lsgòfreeship",
+      "optimized_ms": 20.487066666949733,
+      "baseline_ms": 5537.215699999554,
+      "speedup": 270.2786001537416,
+      "parity": true
+    },
+    {
+      "query": "mà hình sandisk màu ơneâu",
+      "optimized_ms": 16.33456666665249,
+      "baseline_ms": 4957.536566667234,
+      "speedup": 303.49972961255196,
+      "parity": true
+    },
+    {
+      "query": "kính cườg lực lenovo màu vàng",
+      "optimized_ms": 15.536399999594627,
+      "baseline_ms": 5719.154700000217,
+      "speedup": 368.11325018340415,
+      "parity": true
+    },
+    {
+      "query": "smartatch mcbook bluertooth",
+      "optimized_ms": 132.06246666777588,
+      "baseline_ms": 5455.240566667271,
+      "speedup": 41.30803175432726,
+      "parity": true
+    },
+    {
+      "query": "ốpẵlưậglsony chính hãng",
+      "optimized_ms": 133.60646666660614,
+      "baseline_ms": 4719.77346666669,
+      "speedup": 35.32593582048794,
+      "parity": true
+    },
+    {
+      "query": "sạc dự phòng ankeơ c dây",
+      "optimized_ms": 20.40579999993497,
+      "baseline_ms": 4837.588400000338,
+      "speedup": 237.0692842238851,
+      "parity": true
+    }
+  ],
+  "summary": {
+    "successful_runs": 3,
+    "optimized_over_query_means": {
+      "count": 20,
+      "mean_ms": 24.015811666686204,
+      "p50_ms": 13.814916666281835,
+      "p95_ms": 132.06246666777588,
+      "min_ms": 1.4155000001968194,
+      "max_ms": 133.60646666660614
+    },
+    "optimized_pooled_60": {
+      "count": 60,
+      "mean_ms": 24.015811666686204,
+      "p50_ms": 13.645649999489251,
+      "p95_ms": 129.4852000009996,
+      "min_ms": 1.1455000003479654,
+      "max_ms": 153.4100999997463
+    },
+    "paired_all_20": {
+      "observations": 60,
+      "baseline_mean_ms": 4323.865673333512,
+      "optimized_mean_ms": 24.015811666686204,
+      "speedup": 180.0424542523961
+    },
+    "paired_fixed_5": {
+      "observations": 15,
+      "baseline_mean_ms": 3033.180086667077,
+      "optimized_mean_ms": 6.813100000241927,
+      "speedup": 445.1982337789511
+    },
+    "hard_query": {
+      "count": 3,
+      "mean_ms": 181.15353333329645,
+      "p50_ms": 181.0497000005853,
+      "p95_ms": 185.02400000033958,
+      "min_ms": 177.3868999989645,
+      "max_ms": 185.02400000033958
+    },
+    "parity_comparisons": 67,
+    "mismatches": [],
+    "main_mismatch_count": 0,
+    "all_cache_misses": true
+  },
+  "comparison_to_user_supplied_figures": [
+    {
+      "metric": "mean_ms",
+      "reference": 12.68,
+      "measured": 24.015811666686204,
+      "delta": 11.335811666686205,
+      "delta_percent": 89.39914563632654,
+      "status": "DIFFERENT"
+    },
+    {
+      "metric": "p50_ms",
+      "reference": 7.16,
+      "measured": 13.814916666281835,
+      "delta": 6.654916666281835,
+      "delta_percent": 92.94576349555635,
+      "status": "DIFFERENT"
+    },
+    {
+      "metric": "p95_ms",
+      "reference": 71.22,
+      "measured": 132.06246666777588,
+      "delta": 60.84246666777588,
+      "delta_percent": 85.428905739646,
+      "status": "DIFFERENT"
+    },
+    {
+      "metric": "hard_query_ms",
+      "reference": 107.0,
+      "measured": 181.15353333329645,
+      "delta": 74.15353333329645,
+      "delta_percent": 69.30236760121163,
+      "status": "DIFFERENT"
+    },
+    {
+      "metric": "paired_fixed_5_speedup",
+      "reference": 456.0,
+      "measured": 445.1982337789511,
+      "delta": -10.801766221048922,
+      "delta_percent": -2.3688083818089742,
+      "status": "MATCH"
+    }
+  ],
+  "comparison_rule": "Descriptive +/-10% tolerance, not a statistical equivalence test; Word not opened.",
+  "source_and_dataset_unchanged": true,
+  "finished_at": "2026-11-08T07:18:13.037755+00:00"
+}

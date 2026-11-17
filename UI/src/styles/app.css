@@ -1,5 +1,13 @@
-#root { min-height: 100vh; }
-.app-shell { min-height: 100vh; display: flex; background: #fff; }
+#root { min-height: 100dvh; }
+.app-shell { min-height: 100dvh; display: flex; background: var(--canvas); }
 .main-area { min-width: 0; flex: 1; display: flex; flex-direction: column; }
-.content { width: min(700px, calc(100% - 64px)); margin: 0 auto; flex: 1; padding-top: 56px; }
-@media (max-width: 760px) { .app-shell { flex-direction: column; }.content { width: calc(100% - 32px); padding-top: 28px; } }
+.content { width: min(960px, calc(100% - 96px)); margin: 0 auto; flex: 1; padding: 64px 0 48px; }
+.content h1 { margin: 0 0 12px; color: var(--text); font-size: clamp(30px, 3.2vw, 42px); font-weight: 650; line-height: 1.2; letter-spacing: -.045em; }
+.page-description { max-width: 60ch; margin: 0 0 32px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.page-error { padding: 16px 18px; margin: 16px 0; border: 1px solid var(--error); border-radius: 12px; background: var(--error-bg); color: var(--error); font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+@media (max-width: 1024px) { .content { width: calc(100% - 56px); padding-top: 40px; } }
+@media (max-width: 767px) {
+  .app-shell { flex-direction: column; }
+  .content { width: calc(100% - 32px); padding: 32px 0; }
+  .page-description { margin-bottom: 24px; font-size: 14px; }
+}

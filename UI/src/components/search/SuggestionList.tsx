@@ -5,7 +5,7 @@ type SuggestionListProps = { suggestions: Suggestion[]; onSelect: (word: string)
 
 export function SuggestionList({ suggestions, onSelect }: SuggestionListProps) {
   if (!suggestions.length) {
-    return <div className="suggestion-list"><div className="empty-state">Không tìm thấy từ phù hợp.</div></div>
+    return <div className="suggestion-list"><div className="empty-state"><span className="empty-symbol" aria-hidden="true">Aa</span><strong>Chưa có từ phù hợp</strong><p>Nhập hoặc thử đổi từ khóa để xem các gợi ý gần nhất.</p></div></div>
   }
 
   return (

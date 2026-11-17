@@ -1,5 +1,53 @@
-.search-content h1 { margin: 0 0 18px; color: #292d28; font-size: 24px; font-weight: 600; letter-spacing: 0; }
-.results-heading { margin: 24px 0 10px; }
-.search-content h2 { margin: 0; color: #555b54; font-size: 14px; font-weight: 500; }
-.request-status, .request-error { max-width: 640px; padding: 12px; color: #777e74; font-size: 12px; }
-.request-error { color: #a33d32; }
+.search-content { max-width: 840px; isolation: isolate; }
+.search-intro { margin-bottom: 28px; }
+.search-intro h1 { margin-bottom: 0; }
+.results-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 32px 0 14px; }
+.results-heading h2 { margin: 0; color: var(--text); font-size: 16px; font-weight: 600; }
+.results-heading > span { color: var(--muted); font-size: 12px; }
+.request-status, .request-error { padding: 20px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--muted); font-size: 14px; }
+.request-error { border-color: var(--error); background: var(--error-bg); color: var(--error); overflow-wrap: anywhere; }
+.search-explainer { display: flex; align-items: flex-start; gap: 20px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+.search-explainer > span { flex: none; color: var(--accent); font-family: ui-monospace, Consolas, monospace; font-size: 19px; line-height: 1.5; }
+.search-explainer p { max-width: 62ch; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
+.search-explainer strong { color: var(--text); font-weight: 600; }
+@media (max-width: 767px) { .search-intro { margin-bottom: 28px; }.results-heading > span { font-size: 11px; }.search-explainer { gap: 14px; } }
+.search-radar { position: fixed; inset: 0 0 0 248px; z-index: -1; overflow: hidden; pointer-events: none; }
+.search-radar::after { content: ''; position: absolute; inset: 0; background: rgb(0 0 0 / .06); }
+.radar-screen { position: absolute; left: 12%; top: 82%; width: 280vmax; aspect-ratio: 1; transform: translate(-50%, -50%); overflow: hidden; border: 1px solid var(--border); border-radius: 50%; opacity: .55; background: repeating-radial-gradient(circle at center, transparent 0 159px, var(--border) 160px 161px); }
+.radar-screen::before, .radar-screen::after { content: ''; position: absolute; background: var(--border); }
+.radar-screen::before { top: 0; bottom: 0; left: 50%; width: 1px; }
+.radar-screen::after { left: 0; right: 0; top: 50%; height: 1px; }
+.radar-sweep { position: absolute; inset: 0; border-radius: inherit; background: conic-gradient(from 90deg, var(--accent) 0deg, color-mix(in srgb, var(--accent) 24%, transparent) 1deg, color-mix(in srgb, var(--accent) 6%, transparent) 35deg, transparent 65deg 360deg); }
+.radar-center, .radar-dot { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transform: translate(-50%, -50%); }
+.radar-center { left: 50%; top: 50%; width: 10px; height: 10px; outline: 1px solid var(--accent); outline-offset: 5px; }
+.radar-dot { width: 7px; height: 7px; opacity: .4; }
+.radar-dot-one { left: 57%; top: 46%; --echo-delay: .5s; }
+.radar-dot-two { left: 66%; top: 42%; --echo-delay: .44s; }
+.radar-dot-three { left: 53%; top: 36%; --echo-delay: 1.3s; }
+.radar-dot-four { left: 52%; top: 47%; --echo-delay: .94s; }
+.radar-dot-five { left: 55%; top: 40%; --echo-delay: 1.06s; }
+.radar-dot-six { left: 59%; top: 33%; --echo-delay: 1.04s; }
+.radar-dot-seven { left: 61%; top: 45%; --echo-delay: .41s; }
+.radar-dot-eight { left: 54%; top: 29%; --echo-delay: 1.32s; }
+.radar-dot-nine { left: 64%; top: 35%; --echo-delay: .78s; }
+.radar-dot-ten { left: 70%; top: 46%; --echo-delay: .19s; }
+.radar-dot-eleven { left: 58%; top: 43%; --echo-delay: .69s; }
+.radar-dot-twelve { left: 51%; top: 39%; --echo-delay: 1.41s; }
+.radar-dot-thirteen { left: 73%; top: 38%; --echo-delay: .46s; }
+.radar-dot-fourteen { left: 60%; top: 27%; --echo-delay: 1.11s; }
+.radar-dot-fifteen { left: 68%; top: 31%; --echo-delay: .78s; }
+@media (prefers-color-scheme: dark) { .search-radar::after { background: rgb(0 0 0 / .2); } }
+@media (max-width: 1024px) and (min-width: 768px) { .search-radar { left: 208px; } }
+@media (max-width: 767px) { .search-radar { left: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .radar-sweep { animation: radar-scan 6s linear infinite; }
+  .radar-dot { animation: radar-echo 6s ease-out infinite; animation-delay: var(--echo-delay); }
+}
+@keyframes radar-scan {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-90deg); }
+  50% { transform: rotate(-180deg); }
+  75% { transform: rotate(-270deg); }
+  100% { transform: rotate(-360deg); }
+}
+@keyframes radar-echo { 0%, 100% { opacity: .4; } 5% { opacity: 1; } 65% { opacity: .4; } }
