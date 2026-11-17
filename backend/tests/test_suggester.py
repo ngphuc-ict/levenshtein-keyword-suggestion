@@ -7,9 +7,13 @@ import random
 import pytest
 
 from app.core.dictionary import KeywordDictionary
-from app.core.levenshtein import levenshtein_distance, prefix_levenshtein_distance
+from app.core.levenshtein import (
+    anchored_prefix_levenshtein_distance,
+    levenshtein_distance,
+    prefix_levenshtein_distance,
+)
 from app.core.suggester import KeywordSuggester
-from app.core.text import fold_accents, normalize_text, starts_a_word
+from app.core.text import fold_accents, normalize_text
 
 SAMPLE_WORDS = [
     "điện thoại samsung",
@@ -38,9 +42,10 @@ def naive_top(dictionary: KeywordDictionary, query: str, limit: int):
     folded_query = fold_accents(normalized)
     scored = sorted(
         (
-            prefix_levenshtein_distance(folded_query, fold_accents(keyword)),
-            not starts_a_word(folded_query, fold_accents(keyword)),
-            prefix_levenshtein_distance(normalized, keyword),
+            anchored_prefix_levenshtein_distance(folded_query, fold_accents(keyword)),
+            prefix_levenshtein_distance(folded_query, fold_accents(keyword))
+            > anchored_prefix_levenshtein_distance(folded_query, fold_accents(keyword)),
+            anchored_prefix_levenshtein_distance(normalized, keyword),
             levenshtein_distance(normalized, keyword),
             keyword,
         )
@@ -224,3 +229,32 @@ def test_cache_disabled() -> None:
     assert suggester.suggest("điện thoại").cached is False
     assert suggester.suggest("điện thoại").cached is False
     assert suggester.cache_stats()["size"] == 0
+
+
+def test_word_in_the_middle_matches() -> None:
+    """Gõ một từ nằm giữa từ khóa (kể cả sai chính tả) vẫn ra từ khóa chứa nó."""
+    suggester = KeywordSuggester(
+        KeywordDictionary(
+            [
+                "tai nghe cũ",
+                "tai nghe hp",
+                "usb samsung",
+                "điện thoại samsung chính hãng",
+                "ổ cứng wd",
+            ]
+        ),
+        cache_size=0,
+    )
+    for query in ("samsng", "samsung"):
+        keywords = [item.keyword for item in suggester.suggest(query, limit=2).suggestions]
+        assert keywords == ["usb samsung", "điện thoại samsung chính hãng"], query
+    assert suggester.suggest("samsung", limit=1).suggestions[0].distance == 0
+    assert suggester.suggest("samsng", limit=1).suggestions[0].distance == 1
+
+
+def test_start_of_keyword_ranks_before_middle_match() -> None:
+    suggester = KeywordSuggester(
+        KeywordDictionary(["usb vỏ nhôm", "vợt cầu lông", "ví da"]), cache_size=0
+    )
+    keywords = [item.keyword for item in suggester.suggest("v", limit=3).suggestions]
+    assert keywords == ["ví da", "vợt cầu lông", "usb vỏ nhôm"]

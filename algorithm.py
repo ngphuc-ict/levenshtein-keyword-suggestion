@@ -97,9 +97,18 @@ class LevenshteinSuggester:
         return min(previous)
 
     @staticmethod
-    def starts_a_word(query: str, keyword: str) -> bool:
-        """True nếu query xuất hiện ở đầu một từ của keyword."""
-        return (" " + query) in (" " + keyword)
+    def anchored_prefix_distance(query: str, keyword: str) -> int:
+        """Khoảng cách tiền tố nhỏ nhất khi bắt đầu so từ đầu của bất kỳ từ nào.
+
+        Từ khóa sản phẩm thường mở đầu bằng loại hàng ("điện thoại samsung
+        ...") nên người dùng hay gõ một từ ở giữa ("samsng"). Ta so query với
+        phần còn lại của keyword kể từ mỗi đầu từ và lấy giá trị nhỏ nhất.
+        """
+        starts = [0] + [i + 1 for i, c in enumerate(keyword) if c == " "]
+        return min(
+            LevenshteinSuggester.prefix_distance(query, keyword[start:])
+            for start in starts
+        )
 
     def rank_suggestions(
         self,
@@ -109,12 +118,12 @@ class LevenshteinSuggester:
     ) -> List[Suggestion]:
         """Trả về tối đa limit gợi ý gần nhất, cùng khoảng cách chỉnh sửa.
 
-        distance là khoảng cách từ truy vấn tới tiền tố gần nhất của từ khóa.
-        Khoảng cách tính trên chuỗi đã bỏ dấu. Thứ tự xếp hạng: (distance,
-        không bắt đầu một từ trùng truy vấn, khoảng cách tiền tố có dấu,
-        khoảng cách toàn chuỗi, chữ cái) nên kết quả không phụ thuộc thứ tự
-        duyệt của set hoặc nguồn từ điển. Từ khóa trùng sau chuẩn hóa chỉ
-        được tính một lần.
+        distance là khoảng cách từ truy vấn tới tiền tố gần nhất của từ khóa,
+        tính từ đầu từ khóa hoặc từ đầu bất kỳ từ nào trong đó. Khoảng cách
+        tính trên chuỗi đã bỏ dấu. Thứ tự xếp hạng: (distance, khớp không bắt
+        đầu từ đầu từ khóa, khoảng cách tiền tố có dấu, khoảng cách toàn chuỗi,
+        chữ cái) nên kết quả không phụ thuộc thứ tự duyệt của set hoặc nguồn
+        từ điển. Từ khóa trùng sau chuẩn hóa chỉ được tính một lần.
         """
         if limit <= 0 or not isinstance(query, str):
             return []
@@ -131,11 +140,12 @@ class LevenshteinSuggester:
                 continue
             seen.add(candidate)
             folded = self.fold_accents(candidate)
+            distance = self.anchored_prefix_distance(folded_query, folded)
             scored.append(
                 (
-                    self.prefix_distance(folded_query, folded),
-                    not self.starts_a_word(folded_query, folded),
-                    self.prefix_distance(normalized_query, candidate),
+                    distance,
+                    self.prefix_distance(folded_query, folded) > distance,
+                    self.anchored_prefix_distance(normalized_query, candidate),
                     self.levenshtein_distance(normalized_query, candidate),
                     candidate,
                 )

@@ -22,9 +22,13 @@ from collections import OrderedDict
 from dataclasses import dataclass
 
 from .dictionary import KeywordDictionary
-from .levenshtein import levenshtein_distance, prefix_levenshtein_distance
+from .levenshtein import (
+    anchored_prefix_levenshtein_distance,
+    levenshtein_distance,
+    prefix_levenshtein_distance,
+)
 from .suggester import KeywordSuggester
-from .text import fold_accents, normalize_text, starts_a_word
+from .text import fold_accents, normalize_text
 
 DEFAULT_QUERIES: tuple[str, ...] = (
     "điện thoại samsng",
@@ -81,11 +85,12 @@ def naive_top_k(
     scored = []
     for keyword in dictionary.keywords:
         folded = fold_accents(keyword)
+        distance = anchored_prefix_levenshtein_distance(folded_query, folded)
         scored.append(
             (
-                prefix_levenshtein_distance(folded_query, folded),
-                not starts_a_word(folded_query, folded),
-                prefix_levenshtein_distance(normalized, keyword),
+                distance,
+                prefix_levenshtein_distance(folded_query, folded) > distance,
+                anchored_prefix_levenshtein_distance(normalized, keyword),
                 levenshtein_distance(normalized, keyword),
                 keyword,
             )

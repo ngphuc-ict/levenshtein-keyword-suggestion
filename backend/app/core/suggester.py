@@ -1,21 +1,23 @@
 """Bộ gợi ý từ khóa: xếp hạng top-k theo khoảng cách Levenshtein.
 
 ``distance`` là khoảng cách từ truy vấn tới *tiền tố* gần nhất của từ khóa,
-tính trên chuỗi đã bỏ dấu, để truy vấn đang gõ dở hoặc thiếu dấu vẫn có gợi ý.
+tính từ đầu từ khóa hoặc từ đầu *bất kỳ từ nào* trong đó, trên chuỗi đã bỏ
+dấu. Nhờ vậy truy vấn đang gõ dở, thiếu dấu, hoặc chỉ là một từ ở giữa
+("samsng" trong "điện thoại samsung") vẫn có gợi ý.
 
 Quy trình cho mỗi truy vấn:
 
-1. **Duyệt trie** (``trie.PrefixTrie``): các từ khóa chung tiền tố dùng chung
-   cột quy hoạch động, cắt cả nhánh khi cột vượt ngưỡng (chính xác, không gần đúng).
+1. **Duyệt trie** (``trie.PrefixTrie``) trên mọi hậu tố bắt đầu ở đầu một từ:
+   các hậu tố chung tiền tố dùng chung cột quy hoạch động, cắt cả nhánh khi
+   cột vượt ngưỡng (chính xác, không gần đúng).
 2. **Nới ngưỡng dần** 1, 2, 3, 6, ... cho tới khi gom đủ ``k`` kết quả. Khi đã
    đủ, mọi từ khóa có khoảng cách ``<=`` ngưỡng đều đã được tìm thấy nên top-k
    là chính xác.
 3. **Phân hạng khi bằng điểm** trên chuỗi *có dấu* để từ có dấu đúng lên trước.
 
 Xếp hạng giống hệt ``algorithm.py`` của repo: theo ``(tiền tố không dấu,
-không bắt đầu một từ trùng truy vấn, tiền tố có dấu, toàn chuỗi,
-keyword)``. Nhờ vậy kết quả backend trùng khớp
-với bản thuật toán nhóm đã viết.
+khớp không bắt đầu từ đầu từ khóa, tiền tố có dấu, toàn chuỗi, keyword)``.
+Nhờ vậy kết quả backend trùng khớp với bản thuật toán nhóm đã viết.
 """
 
 from __future__ import annotations
@@ -28,8 +30,8 @@ from dataclasses import dataclass
 from typing import Any
 
 from .dictionary import KeywordDictionary
-from .levenshtein import levenshtein_distance, prefix_levenshtein_distance
-from .text import fold_accents, normalize_text, starts_a_word
+from .levenshtein import anchored_prefix_levenshtein_distance, levenshtein_distance
+from .text import fold_accents, normalize_text, word_starts
 from .trie import PrefixTrie
 
 
@@ -107,12 +109,28 @@ class _LRUCache:
 class KeywordSuggester:
     """Tìm tối đa ``limit`` từ khóa gần truy vấn nhất."""
 
-    __slots__ = ("_dictionary", "_folded", "_trie", "_cache")
+    __slots__ = ("_dictionary", "_folded", "_trie", "_suffixes", "_cache")
 
     def __init__(self, dictionary: KeywordDictionary, cache_size: int = 1024) -> None:
         self._dictionary = dictionary
         self._folded = [fold_accents(keyword) for keyword in dictionary.keywords]
-        self._trie = PrefixTrie(self._folded)
+
+        # Trie trên các hậu tố bắt đầu ở đầu từ; hậu tố trùng nhau (rất nhiều,
+        # vd. "samsung chính hãng") chỉ lưu một lần kèm danh sách từ khóa chứa nó.
+        suffix_ids: dict[str, int] = {}
+        suffix_words: list[str] = []
+        self._suffixes: list[list[tuple[int, bool]]] = []
+        for word_id, folded in enumerate(self._folded):
+            for start in word_starts(folded):
+                suffix = folded[start:]
+                suffix_id = suffix_ids.get(suffix)
+                if suffix_id is None:
+                    suffix_id = len(suffix_words)
+                    suffix_ids[suffix] = suffix_id
+                    suffix_words.append(suffix)
+                    self._suffixes.append([])
+                self._suffixes[suffix_id].append((word_id, start == 0))
+        self._trie = PrefixTrie(suffix_words)
         self._cache = _LRUCache(cache_size)
 
     @property
@@ -186,28 +204,45 @@ class KeywordSuggester:
 
         while True:
             cutoff = threshold if max_distance is None else min(threshold, max_distance)
-            found = self._trie.search(folded_query, cutoff)
+            found = self._merge_suffixes(self._trie.search(folded_query, cutoff))
 
             # Khoảng cách tiền tố luôn <= len(query), nên chạm mức đó là đã xét hết.
             exhausted = cutoff >= len(query)
             capped = max_distance is not None and cutoff >= max_distance
             if len(found) >= limit or exhausted or capped:
-                return self._order(query, folded_query, found, limit), len(found)
+                return self._order(query, found, limit), len(found)
 
             threshold = threshold + 1 if threshold < 3 else threshold * 2
+
+    def _merge_suffixes(self, by_suffix: dict[int, int]) -> dict[int, tuple[int, bool]]:
+        """Gộp kết quả theo hậu tố thành ``{từ khóa: (khoảng cách nhỏ nhất, khớp ở giữa)}``.
+
+        ``khớp ở giữa`` là True khi chỉ có hậu tố bắt đầu ở từ thứ hai trở đi mới
+        đạt khoảng cách nhỏ nhất (từ khóa đó không "mở đầu" bằng truy vấn).
+        """
+        best: dict[int, int] = {}
+        at_start: dict[int, int] = {}
+        for suffix_id, distance in by_suffix.items():
+            for word_id, is_first in self._suffixes[suffix_id]:
+                if word_id not in best or distance < best[word_id]:
+                    best[word_id] = distance
+                if is_first:
+                    at_start[word_id] = distance
+        return {
+            word_id: (distance, at_start.get(word_id, distance + 1) > distance)
+            for word_id, distance in best.items()
+        }
 
     def _order(
         self,
         query: str,
-        folded_query: str,
-        found: dict[int, int],
+        found: dict[int, tuple[int, bool]],
         limit: int,
     ) -> tuple[Suggestion, ...]:
-        """Xếp theo (tiền tố không dấu, không bắt đầu một từ, rồi chọn theo dấu/toàn chuỗi)."""
+        """Xếp theo (tiền tố không dấu, khớp ở giữa, rồi chọn theo dấu/toàn chuỗi)."""
         keywords = self._dictionary.keywords
         groups: dict[tuple[int, bool], list[str]] = {}
-        for word_id, distance in found.items():
-            key = (distance, not starts_a_word(folded_query, self._folded[word_id]))
+        for word_id, key in found.items():
             groups.setdefault(key, []).append(keywords[word_id])
 
         result: list[Suggestion] = []
@@ -221,12 +256,12 @@ class KeywordSuggester:
 
 
 def _select_with_accents(query: str, keywords: list[str], need: int) -> list[str]:
-    """``need`` từ khóa tốt nhất theo (tiền tố có dấu, toàn chuỗi, chữ cái)."""
+    """``need`` từ khóa tốt nhất theo (tiền tố có dấu từ đầu từ, toàn chuỗi, chữ cái)."""
     bound = len(query)
     top: list[int] = []
     scored: list[tuple[int, str]] = []
     for keyword in keywords:
-        distance = prefix_levenshtein_distance(query, keyword, bound)
+        distance = anchored_prefix_levenshtein_distance(query, keyword, bound)
         if distance > bound:
             continue
         scored.append((distance, keyword))

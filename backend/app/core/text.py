@@ -37,6 +37,6 @@ def fold_accents(text: str) -> str:
     return stripped.replace("đ", "d")
 
 
-def starts_a_word(query: str, keyword: str) -> bool:
-    """True nếu ``query`` xuất hiện ở đầu một từ của ``keyword``."""
-    return (" " + query) in (" " + keyword)
+def word_starts(text: str) -> list[int]:
+    """Vị trí đầu mỗi từ của ``text`` (đã chuẩn hóa: các từ cách nhau một dấu cách)."""
+    return [0] + [index + 1 for index, char in enumerate(text) if char == " "]

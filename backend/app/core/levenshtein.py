@@ -22,6 +22,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .text import word_starts
+
 
 @dataclass(frozen=True, slots=True)
 class EditStep:
@@ -185,6 +187,25 @@ def prefix_levenshtein_distance(query: str, keyword: str, max_distance: int | No
     if max_distance is not None and result > max_distance:
         return max_distance + 1
     return result
+
+
+def anchored_prefix_levenshtein_distance(
+    query: str, keyword: str, max_distance: int | None = None
+) -> int:
+    """Khoảng cách tiền tố nhỏ nhất khi bắt đầu so từ *đầu của bất kỳ từ nào* trong ``keyword``.
+
+    Từ khóa sản phẩm thường mở đầu bằng loại hàng ("điện thoại samsung ...")
+    nên người dùng hay gõ một từ ở giữa ("samsng"). Ta thử so truy vấn với
+    phần còn lại của từ khóa kể từ mỗi đầu từ rồi lấy giá trị nhỏ nhất.
+    """
+    best = None
+    for start in word_starts(keyword):
+        distance = prefix_levenshtein_distance(query, keyword[start:], max_distance)
+        if best is None or distance < best:
+            best = distance
+            if best == 0:
+                break
+    return best  # type: ignore[return-value]  # word_starts luôn có ít nhất một phần tử
 
 
 def levenshtein_matrix(source: str, target: str) -> list[list[int]]:

@@ -59,3 +59,12 @@ def test_bounded_rejects_negative_limit() -> None:
 def test_bounded_is_not_worse_than_limit() -> None:
     assert bounded_levenshtein_distance("kitten", "sitting", 2) == 3
     assert bounded_levenshtein_distance("kitten", "sitting", 3) == 3
+
+
+def test_anchored_prefix_distance() -> None:
+    from app.core.levenshtein import anchored_prefix_levenshtein_distance as anchored
+
+    assert anchored("samsng", "điện thoại samsung chính hãng") == 1
+    assert anchored("samsung", "usb samsung") == 0
+    assert anchored("dien tho", "điện thoại") > 0  # chưa bỏ dấu thì còn lệch
+    assert anchored("xyz", "usb samsung", 1) == 2  # vượt ngưỡng trả k + 1

@@ -76,9 +76,9 @@ Chạy bằng python check_algorithm.py.
 
 ## Khoảng cách theo tiền tố (gõ dở)
 
-Khi người dùng mới gõ vài ký tự (ví dụ `v`, `dien tho`), so với cả từ khóa thì từ khóa ngắn nhất luôn thắng. Vì vậy `distance` trong `rank_suggestions` là khoảng cách từ truy vấn tới **tiền tố gần nhất** của từ khóa: dùng cùng bảng quy hoạch động nhưng lấy `min D[m][j]` trên hàng cuối thay vì ô `D[m][n]`. Thứ tự xếp hạng: khoảng cách tiền tố, rồi từ khóa có từ bắt đầu bằng truy vấn, rồi khoảng cách toàn chuỗi, rồi chữ cái. Truy vấn đủ dài như `điện thoại samsng` vẫn cho `điện thoại samsung` đứng đầu.
+Khi người dùng mới gõ vài ký tự (ví dụ `v`, `dien tho`), so với cả từ khóa thì từ khóa ngắn nhất luôn thắng. Vì vậy `distance` trong `rank_suggestions` là khoảng cách từ truy vấn tới **tiền tố gần nhất** của từ khóa: dùng cùng bảng quy hoạch động nhưng lấy `min D[m][j]` trên hàng cuối thay vì ô `D[m][n]`. Khoảng cách được tính từ đầu từ khóa **hoặc từ đầu bất kỳ từ nào** trong đó (lấy giá trị nhỏ nhất), nên gõ một từ nằm giữa như `samsng` vẫn ra `usb samsung`, `balo samsung`… chứ không chỉ khớp phần đầu từ khóa. Thứ tự xếp hạng: khoảng cách tiền tố, rồi khớp từ đầu từ khóa trước khớp ở giữa, rồi khoảng cách có dấu, khoảng cách toàn chuỗi, chữ cái. Truy vấn đủ dài như `điện thoại samsng` vẫn cho `điện thoại samsung` đứng đầu.
 
-Việc so khớp thực hiện trên chuỗi **đã bỏ dấu**, nên gõ `dien thoai samsng` hay `ban` vẫn ra `điện thoại samsung…` / `bàn…`; khi bằng điểm, từ khóa khớp cả dấu được xếp trước. Backend duyệt từ điển bằng **trie** (các từ khóa chung tiền tố dùng chung cột quy hoạch động, cắt nhánh khi vượt ngưỡng) nên mỗi truy vấn chỉ mất vài mili giây, kể cả truy vấn xa từ vựng (~60–100 ms thay vì ~1 s) mà kết quả vẫn trùng khớp `algorithm.py`.
+Việc so khớp thực hiện trên chuỗi **đã bỏ dấu**, nên gõ `dien thoai samsng` hay `ban` vẫn ra `điện thoại samsung…` / `bàn…`; khi bằng điểm, từ khóa khớp cả dấu được xếp trước. Backend duyệt từ điển bằng **trie** trên mọi hậu tố bắt đầu ở đầu từ (các hậu tố chung tiền tố dùng chung cột quy hoạch động, cắt nhánh khi vượt ngưỡng) nên mỗi truy vấn chỉ mất vài mili giây, kể cả truy vấn xa từ vựng (~60–100 ms thay vì ~1 s) mà kết quả vẫn trùng khớp `algorithm.py`. (Số liệu tốc độ chính xác: xem `backend/benchmarks/benchmark.py`.)
 
 ## Chuẩn hóa và tiếng Việt
 
